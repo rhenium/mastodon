@@ -299,7 +299,7 @@ GEM
       sidekiq (>= 3.5.0)
       statsd-ruby (~> 1.2.0)
     oj (3.3.9)
-    openssl (2.0.6)
+    openssl (2.1.0)
     orm_adapter (0.5.0)
     ostatus2 (2.0.1)
       addressable (~> 2.4)

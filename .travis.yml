@@ -54,6 +54,9 @@ before_script:
   - ln -s /usr/bin/x86_64-linux-gnu-g++-6 "$HOME/g++"
 
 script:
+  - ruby -v
+  - bundle --version
+  - bundle exec ruby -e'require"openssl"; p OpenSSL::VERSION; puts $LOADED_FEATURES.grep(/openssl/)'
   - travis_retry bundle exec parallel_test spec/ --group-by filesize --type rspec
   - yarn test
   - bundle exec i18n-tasks check-normalized && bundle exec i18n-tasks unused
