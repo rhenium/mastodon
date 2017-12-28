@@ -45,7 +45,7 @@ services:
 
 install:
   - nvm install
-  - bundle install --path=vendor/bundle --without development production --retry=3 --jobs=16
+  - bundle install --without development production --retry=3 --jobs=16
   - yarn install
 
 before_script:
@@ -57,6 +57,8 @@ script:
   - ruby -v
   - bundle --version
   - bundle exec ruby -e'require"openssl"; p OpenSSL::VERSION; puts $LOADED_FEATURES.grep(/openssl/)'
+  - ruby -e'require"openssl"; p OpenSSL::VERSION; puts $LOADED_FEATURES.grep(/openssl/)'
+  - rails runner 'puts $LOADED_FEATURES.grep(/openssl/);OpenSSL::PKCS5.pbkdf2_hmac_sha1 rescue nil;puts $LOADED_FEATURES.grep(/openssl/)'
   - travis_retry bundle exec parallel_test spec/ --group-by filesize --type rspec
   - yarn test
   - bundle exec i18n-tasks check-normalized && bundle exec i18n-tasks unused
