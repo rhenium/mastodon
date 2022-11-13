@@ -149,7 +149,7 @@ services:
       - external_network
       - internal_network
     volumes:
-      - ./dist/nginx.conf:/etc/nginx/templates/mastodon.conf:ro
+      - ./nginx.conf:/etc/nginx/templates/mastodon.conf.template:ro
       - ./data/nginx-logs:/var/log/nginx
       # FIXME: This is empty. It is currently handled by 'web'.
       - ./data/public:/home/mastodon/live/public:ro
