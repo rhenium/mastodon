@@ -25,7 +25,7 @@ module Mastodon
     end
 
     def build_metadata
-      ENV.fetch('MASTODON_VERSION_METADATA', nil)
+      ENV.fetch('MASTODON_VERSION_METADATA', "nnn")
     end
 
     def to_a
@@ -44,7 +44,7 @@ module Mastodon
     end
 
     def repository
-      ENV.fetch('GITHUB_REPOSITORY', 'mastodon/mastodon')
+      ENV.fetch('GITHUB_REPOSITORY', 'rhenium/mastodon')
     end
 
     def source_base_url
@@ -53,7 +53,7 @@ module Mastodon
 
     # specify git tag or commit hash here
     def source_tag
-      ENV.fetch('SOURCE_TAG', nil)
+      ENV.fetch('SOURCE_TAG', "nnn")
     end
 
     def source_url
