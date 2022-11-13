@@ -142,6 +142,20 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
 
+  nginx:
+    image: nginx:latest
+    restart: always
+    networks:
+      - external_network
+      - internal_network
+    volumes:
+      - ./dist/nginx.conf:/etc/nginx/templates/mastodon.conf:ro
+      - ./data/nginx-logs:/var/log/nginx
+      # FIXME: This is empty. It is currently handled by 'web'.
+      - ./data/public:/home/mastodon/live/public:ro
+    ports:
+      - "80:80"
+
 networks:
   external_network:
   internal_network:
