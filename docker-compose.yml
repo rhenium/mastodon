@@ -127,6 +127,21 @@ services:
   #     - external_network
   #     - internal_network
 
+  minio:
+    image: quay.io/minio/minio:RELEASE.2022-11-11T03-44-20Z
+    restart: always
+    command: server --console-address ":9001" /minio-data
+    networks:
+      - external_network
+      - internal_network
+    volumes:
+      - ./data/minio:/minio-data
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+
 networks:
   external_network:
   internal_network:
