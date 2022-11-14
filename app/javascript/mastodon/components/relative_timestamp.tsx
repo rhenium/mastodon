@@ -102,6 +102,25 @@ const getUnitDelay = (units: string) => {
   }
 };
 
+export const timeString = (date: Date, now: number, timeGiven: boolean) => {
+  const gd = (date: Date) =>
+    date.getFullYear().toString() +
+    '-' +
+    (date.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    date.getDate().toString().padStart(2, '0');
+  const gt = (date: Date) =>
+    date.getHours().toString().padStart(2, '0') +
+    ':' +
+    date.getMinutes().toString().padStart(2, '0') +
+    ':' +
+    date.getSeconds().toString().padStart(2, '0');
+
+  if (!timeGiven) return gd(date);
+  if (gd(date) === gd(new Date(now))) return gt(date);
+  return `${gd(date)} ${gt(date)}`;
+};
+
 export const timeAgoString = (
   intl: IntlShape,
   date: Date,
@@ -110,6 +129,7 @@ export const timeAgoString = (
   timeGiven: boolean,
   short?: boolean,
 ) => {
+  return timeString(date, now, timeGiven);
   const delta = now - date.getTime();
 
   let relativeTime;
@@ -151,7 +171,7 @@ export const timeAgoString = (
     });
   }
 
-  return relativeTime;
+  return relativeTime as string;
 };
 
 const timeRemainingString = (
@@ -160,6 +180,7 @@ const timeRemainingString = (
   now: number,
   timeGiven = true,
 ) => {
+  return timeString(date, now, timeGiven);
   const delta = date.getTime() - now;
 
   let relativeTime;
@@ -186,7 +207,7 @@ const timeRemainingString = (
     });
   }
 
-  return relativeTime;
+  return relativeTime as string;
 };
 
 interface Props {
@@ -268,6 +289,7 @@ class RelativeTimestamp extends Component<Props, States> {
 
     return (
       <time
+        className={futureDate ? 'future' : ''}
         dateTime={timestamp}
         title={intl.formatDate(date, dateFormatOptions)}
       >
