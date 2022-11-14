@@ -3,6 +3,7 @@ import type { FC } from 'react';
 
 import { useIntl } from 'react-intl';
 
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 import {
   formatTime,
   MAX_TIMEOUT,
@@ -75,8 +76,14 @@ export const RelativeTimestamp: FC<{
     [ts, intl, long, daysOnly, now],
   );
 
+  const isFuture = ts > now;
+
   return (
-    <time dateTime={timestamp} title={intl.formatDate(date, dateFormatOptions)}>
+    <time
+      className={isFuture ? 'future' : ''}
+      dateTime={timestamp}
+      title={intlFixes.formatDate(date, dateFormatOptions)}
+    >
       {relativeTime}
     </time>
   );
