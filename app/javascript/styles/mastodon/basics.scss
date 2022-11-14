@@ -338,3 +338,7 @@ article {
     z-index: unset !important;
   }
 }
+
+time.future {
+  color: var(--color-text-warning);
+}
