@@ -71,7 +71,23 @@ const getUnitDelay = units => {
   }
 };
 
+const timeString = (intl, date, now, year, timeGiven, short) => {
+  const gd = date => date.getFullYear().toString() + "-" +
+    (date.getMonth() + 1).toString().padStart(2, "0") + "-" +
+    date.getDate().toString().padStart(2, "0");
+  const gt = date => date.getHours().toString().padStart(2, "0") + ":" +
+    date.getMinutes().toString().padStart(2, "0") + ":" +
+    date.getSeconds().toString().padStart(2, "0");
+
+  if (!timeGiven)
+	return gd(date);
+  if (gd(date) == gd(new Date(now)))
+    return gt(date);
+  return `${gd(date)} ${gt(date)}`;
+}
+
 export const timeAgoString = (intl, date, now, year, timeGiven, short) => {
+  return timeString(intl, date, now, year, timeGiven, short);
   const delta = now - date.getTime();
 
   let relativeTime;
@@ -100,6 +116,7 @@ export const timeAgoString = (intl, date, now, year, timeGiven, short) => {
 };
 
 const timeRemainingString = (intl, date, now, timeGiven = true) => {
+  return timeString(intl, date, now, undefined, timeGiven, undefined);
   const delta = date.getTime() - now;
 
   let relativeTime;
@@ -190,7 +207,8 @@ class RelativeTimestamp extends React.Component {
     const relativeTime = futureDate ? timeRemainingString(intl, date, this.state.now, timeGiven) : timeAgoString(intl, date, this.state.now, year, timeGiven, short);
 
     return (
-      <time dateTime={timestamp} title={intl.formatDate(date, dateFormatOptions)}>
+      <time className={futureDate ? "future" : ""}
+          dateTime={timestamp} title={intl.formatDate(date, dateFormatOptions)}>
         {relativeTime}
       </time>
     );
