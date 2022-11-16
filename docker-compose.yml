@@ -154,12 +154,17 @@ services:
       # FIXME: This is empty. It is currently handled by 'web'.
       - ./data/public:/home/mastodon/live/public:ro
     ports:
-      - "80:80"
+      - "0.0.0.0:80:80"
 
 networks:
   external_network:
     driver: bridge
     driver_opts:
       com.docker.network.driver.mtu: 1412
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 2001:db8:1234:5678::/64
+          gateway: 2001:db8:1234:5678::1
   internal_network:
     internal: true
