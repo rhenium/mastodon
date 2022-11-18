@@ -36,11 +36,10 @@
     font-weight: 400;
 
     .emojione {
-      width: 20px;
+      min-width: 20px;
       height: 20px;
-      margin: -3px 0 0;
-      margin-inline-start: 0.075em;
-      margin-inline-end: 0.075em;
+      margin: 0;
+      vertical-align: top;
     }
 
     p {
