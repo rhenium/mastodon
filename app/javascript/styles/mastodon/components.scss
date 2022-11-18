@@ -758,7 +758,8 @@ body > [data-popper-placement] {
   vertical-align: middle;
   object-fit: contain;
   margin: -0.2ex 0.15em 0.2ex;
-  width: 16px;
+  width: auto;
+  min-width: 16px;
   height: 16px;
 
   img {
@@ -834,9 +835,10 @@ body > [data-popper-placement] {
   }
 
   .emojione {
-    width: 20px;
-    height: 20px;
-    margin: -3px 0 0;
+    min-width: 22px;
+    height: 22px;
+    margin: 0;
+    vertical-align: top;
   }
 
   p {
@@ -915,9 +917,10 @@ body > [data-popper-placement] {
   overflow-y: auto;
 
   .emojione {
-    width: 20px;
+    min-width: 20px;
     height: 20px;
-    margin: -3px 0 0;
+    margin: 0;
+    vertical-align: top;
   }
 
   p {
@@ -1204,6 +1207,13 @@ body > [data-popper-placement] {
       text-overflow: ellipsis;
     }
 
+    .emojione {
+      min-width: 22px;
+      height: 22px;
+      margin: 0;
+      vertical-align: top;
+    }
+
     &__account {
       white-space: nowrap;
       display: block;
@@ -1329,9 +1339,10 @@ body > [data-popper-placement] {
     line-height: 24px;
 
     .emojione {
-      width: 24px;
+      min-width: 24px;
       height: 24px;
-      margin: -1px 0 0;
+      margin: 0;
+      vertical-align: top;
     }
 
     .status__content__spoiler-link {
@@ -1757,6 +1768,13 @@ a.account__display-name {
     display: inline;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .emojione {
+    min-width: 22px;
+    height: 22px;
+    margin: 0;
+    vertical-align: top;
   }
 }
 
@@ -4725,7 +4743,7 @@ a.status-card.compact:hover {
     opacity: 0.8;
     display: block;
     margin: 0;
-    width: 22px;
+    min-width: 22px;
     height: 22px;
   }
 
@@ -6068,9 +6086,10 @@ a.status-card.compact:hover {
     line-height: 24px;
 
     .emojione {
-      width: 24px;
+      min-width: 24px;
       height: 24px;
-      margin: -1px 0 0;
+      margin: 0;
+      vertical-align: top;
     }
 
     a {
@@ -7402,8 +7421,10 @@ noscript {
       }
 
       .emojione {
-        width: 22px;
+        min-width: 22px;
         height: 22px;
+        margin: 0;
+        vertical-align: top;
       }
 
       h1 {
