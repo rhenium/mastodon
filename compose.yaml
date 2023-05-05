@@ -140,6 +140,7 @@ services:
       - ./data/public:/home/mastodon/live/public:ro
     ports:
       - "0.0.0.0:80:80"
+      - "[::]:80:80"
 
 networks:
   external_network:
