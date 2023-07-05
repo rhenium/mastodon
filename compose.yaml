@@ -57,7 +57,7 @@ services:
 
   web:
     build: ../mastodon
-    image: tootsuite/mastodon
+    image: nnn-mastodon-prod
     restart: always
     env_file: env.production
     command: bash -c "rm -f /mastodon/tmp/pids/server.pid; bundle exec rails s -b '[::]' -p 3000"
@@ -79,7 +79,7 @@ services:
 
   streaming:
     build: ../mastodon
-    image: tootsuite/mastodon
+    image: nnn-mastodon-prod
     restart: always
     env_file: env.production
     command: bash -c "BIND='::' node ./streaming"
@@ -98,7 +98,7 @@ services:
 
   sidekiq:
     build: ../mastodon
-    image: tootsuite/mastodon
+    image: nnn-mastodon-prod
     restart: always
     env_file: env.production
     command: bundle exec sidekiq
