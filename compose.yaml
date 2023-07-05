@@ -53,13 +53,14 @@ services:
         hard: 65536
     ports:
       - '127.0.0.1:9200:9200'
+      - '[::1]:9200:9200'
 
   web:
     build: ../mastodon
     image: tootsuite/mastodon
     restart: always
     env_file: env.production
-    command: bash -c "rm -f /mastodon/tmp/pids/server.pid; bundle exec rails s -p 3000"
+    command: bash -c "rm -f /mastodon/tmp/pids/server.pid; bundle exec rails s -b '[::]' -p 3000"
     networks:
       - external_network
       - internal_network
@@ -68,6 +69,7 @@ services:
       test: ['CMD-SHELL', 'wget -q --spider --proxy=off localhost:3000/health || exit 1']
     ports:
       - '127.0.0.1:3000-3003:3000'
+      - '[::1]:3000-3003:3000'
     depends_on:
       - db
       - redis
@@ -80,7 +82,7 @@ services:
     image: tootsuite/mastodon
     restart: always
     env_file: env.production
-    command: node ./streaming
+    command: bash -c "BIND='::' node ./streaming"
     networks:
       - external_network
       - internal_network
@@ -89,6 +91,7 @@ services:
       test: ['CMD-SHELL', 'wget -q --spider --proxy=off localhost:4000/api/v1/streaming/health || exit 1']
     ports:
       - '127.0.0.1:4000-4003:4000'
+      - '[::1]:4000-4003:4000'
     depends_on:
       - db
       - redis
