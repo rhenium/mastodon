@@ -1217,6 +1217,10 @@
         "id": "account.open_original_page"
       },
       {
+        "defaultMessage": "Fetch remote outbox of @{name}",
+        "id": "account.fetch_remote_outbox"
+      },
+      {
         "defaultMessage": "Follows you",
         "id": "account.follows_you"
       },
