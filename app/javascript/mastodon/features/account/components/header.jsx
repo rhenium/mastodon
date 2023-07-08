@@ -72,6 +72,7 @@ const messages = defineMessages({
   admin_domain: { id: 'status.admin_domain', defaultMessage: 'Open moderation interface for {domain}' },
   languages: { id: 'account.languages', defaultMessage: 'Change subscribed languages' },
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
+  fetchRemoteOutbox: { id: 'account.fetch_remote_outbox', defaultMessage: 'Fetch remote outbox of @{name}' },
 });
 
 const titleFromAccount = account => {
@@ -113,6 +114,7 @@ class Header extends ImmutablePureComponent {
     onInteractionModal: PropTypes.func.isRequired,
     onOpenAvatar: PropTypes.func.isRequired,
     onOpenURL: PropTypes.func.isRequired,
+    onFetchRemoteOutbox: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     domain: PropTypes.string.isRequired,
     hidden: PropTypes.bool,
@@ -305,6 +307,7 @@ class Header extends ImmutablePureComponent {
 
     if (isRemote) {
       menu.push({ text: intl.formatMessage(messages.openOriginalPage), href: account.get('url') });
+      menu.push({ text: intl.formatMessage(messages.fetchRemoteOutbox, { name: account.get('username') }), action: this.props.onFetchRemoteOutbox });
       menu.push(null);
     }
 
