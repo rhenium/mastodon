@@ -596,6 +596,8 @@ Rails.application.routes.draw do
           post :unblock
           post :mute
           post :unmute
+
+          post :fetch_remote
         end
 
         resource :pin, only: :create, controller: 'accounts/pins'
