@@ -169,6 +169,8 @@ namespace :api, format: false do
         post :unblock
         post :mute
         post :unmute
+
+        post :fetch_remote
       end
 
       resource :pin, only: :create, controller: 'accounts/pins'
