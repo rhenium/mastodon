@@ -17,7 +17,7 @@ class UserSettings
   setting :default_privacy, default: nil, in: %w(public unlisted private)
 
   namespace :web do
-    setting :advanced_layout, default: false
+    setting :advanced_layout, default: true
     setting :trends, default: true
     setting :use_blurhash, default: true
     setting :use_pending_items, default: false
