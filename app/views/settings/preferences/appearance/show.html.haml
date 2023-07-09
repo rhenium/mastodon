@@ -35,6 +35,11 @@
       #{t 'appearance.localization.body'} #{content_tag(:a, t('appearance.localization.guide_link_text'), href: t('appearance.localization.guide_link'), target: '_blank', rel: 'noopener')}
 
   = f.simple_fields_for :settings, current_user.settings do |ff|
+    %h4= t 'appearance.optional_feature'
+
+    .fields-group
+      = ff.input :'web.mod_bigger_publish', wrapper: :with_label, label: I18n.t('simple_form.labels.defaults.setting_bigger_publish'), hint: I18n.t('simple_form.hints.defaults.setting_bigger_publish')
+
     %h4= t 'appearance.advanced_web_interface'
 
     %p.hint= t 'appearance.advanced_web_interface_hint'
