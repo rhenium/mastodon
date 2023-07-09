@@ -156,6 +156,8 @@ module ApplicationHelper
     'compact' => 'compact-padding',
   }.freeze
 
+  FONT_SIZES = %w(smallest small medium large largest).freeze
+
   def body_classes
     output = body_class_string.split
     output << "theme-#{current_theme.parameterize}"
@@ -165,6 +167,11 @@ module ApplicationHelper
     output << 'rtl' if locale_direction == 'rtl'
     style = WEBUI_STYLES[current_account&.user&.setting_webui_styles] and
       output << style
+    if font_size = current_account&.user&.setting_font_size
+      if FONT_SIZES.include?(font_size)
+        output << "font-size-#{font_size}"
+      end
+    end
     output.compact_blank.join(' ')
   end
 

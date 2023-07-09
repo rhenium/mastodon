@@ -28,6 +28,9 @@
     .fields-group
       = ff.input :'web.mod_bigger_publish', wrapper: :with_label, label: I18n.t('simple_form.labels.defaults.setting_bigger_publish'), hint: I18n.t('simple_form.hints.defaults.setting_bigger_publish')
 
+    .fields-group
+      = ff.input :'web.mod_font_size', label: I18n.t('simple_form.labels.defaults.setting_font_size'), collection: ApplicationHelper::FONT_SIZES, label_method: lambda { |item| t("simple_form.hints.defaults.setting_font_size_#{item}") }, wrapper: :with_label, include_blank: false, hint: false
+
     %h4= t 'appearance.advanced_web_interface'
 
     %p.hint= t 'appearance.advanced_web_interface_hint'
