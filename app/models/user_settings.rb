@@ -32,6 +32,7 @@ class UserSettings
     setting :auto_play, default: false
     setting :mod_bigger_publish, default: false
     setting :mod_webui_styles, default: 'default', in: %w(default compact)
+    setting :mod_font_size, default: 'large', in: %w(smallest small medium large largest)
   end
 
   namespace :notification_emails do
