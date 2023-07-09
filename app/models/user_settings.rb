@@ -33,6 +33,7 @@ class UserSettings
     setting :display_media, default: 'default', in: %w(default show_all hide_all)
     setting :auto_play, default: false
     setting :mod_bigger_publish, default: false
+    setting :mod_webui_styles, default: 'default', in: %w(default compact)
   end
 
   namespace :notification_emails do
