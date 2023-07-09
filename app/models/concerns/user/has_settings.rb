@@ -138,4 +138,8 @@ module User::HasSettings
   def setting_bigger_publish
     settings['web.mod_bigger_publish']
   end
+
+  def setting_webui_styles
+    settings['web.mod_webui_styles']
+  end
 end

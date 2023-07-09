@@ -28,6 +28,7 @@ class MoveUserSettings < ActiveRecord::Migration[6.1]
     use_pending_items: 'web.use_pending_items',
     crop_images: 'web.crop_images',
     bigger_publish: 'web.mod_bigger_publish',
+    webui_styles: 'web.mod_webui_styles',
     notification_emails: {
       follow: 'notification_emails.follow',
       reblog: 'notification_emails.reblog',
