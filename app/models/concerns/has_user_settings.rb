@@ -146,4 +146,8 @@ module HasUserSettings
   def setting_webui_styles
     settings['web.mod_webui_styles']
   end
+
+  def setting_font_size
+    settings['web.mod_font_size']
+  end
 end
