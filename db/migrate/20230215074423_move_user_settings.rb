@@ -29,6 +29,7 @@ class MoveUserSettings < ActiveRecord::Migration[6.1]
     crop_images: 'web.crop_images',
     bigger_publish: 'web.mod_bigger_publish',
     webui_styles: 'web.mod_webui_styles',
+    font_size: 'web.mod_font_size',
     notification_emails: {
       follow: 'notification_emails.follow',
       reblog: 'notification_emails.reblog',
