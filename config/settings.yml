@@ -72,6 +72,7 @@ defaults: &defaults
   require_invite_text: false
   backups_retention_period: 7
   bigger_publish: false
+  webui_styles: 'default'
 
 development:
   <<: *defaults
