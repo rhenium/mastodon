@@ -159,6 +159,11 @@ module ApplicationHelper
     tag.meta(content: content, property: property)
   end
 
+  WEBUI_STYLES = {
+    'default' => '',
+    'compact' => 'compact-padding',
+  }.freeze
+
   def body_classes
     output = body_class_string.split
     output << "theme-#{current_theme.parameterize}"
@@ -166,6 +171,8 @@ module ApplicationHelper
     output << (current_account&.user&.setting_reduce_motion ? 'reduce-motion' : 'no-reduce-motion')
     output << 'bigger-publish' if current_account&.user&.setting_bigger_publish
     output << 'rtl' if locale_direction == 'rtl'
+    style = WEBUI_STYLES[current_account&.user&.setting_webui_styles] and
+      output << style
     output.compact_blank.join(' ')
   end
 

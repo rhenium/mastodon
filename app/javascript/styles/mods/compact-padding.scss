@@ -1,0 +1,142 @@
+.compact-padding {
+  .status__prepend,
+  .notification__message {
+    padding-top: 6px;
+
+    /* div is: (1) .status, (2) .account, (3) a unclassed div with tabindex containing a .status */
+    & + div {
+      padding-top: 6px !important;
+    }
+
+    /* The (3) case */
+    & + div .status {
+      padding-top: 0;
+    }
+  }
+
+  .status {
+    padding: 12px;
+    padding-bottom: 6px;
+  }
+
+  .status__info {
+    .status__relative-time {
+      /* 40px by default */
+
+      /* Force this element to be two lines so the height matches with the display name */
+
+      /* I could alternatively height: 44px */
+      height: auto;
+
+      &::after {
+        content: "\a\a";
+        white-space: pre;
+      }
+    }
+  }
+
+  .status__content__read-more-button,
+  .status__content__translate-button {
+    /* 16px */
+    padding-top: 12px;
+  }
+
+  .translate-button {
+    /* margin-top: 16px -> be consistent with .status__content__read-more-button */
+    margin-top: 0;
+    padding-top: 12px;
+  }
+
+  .status__action-bar {
+    margin-top: 6px;
+    justify-content: flex-start;
+    gap: 9px;
+
+    button.icon-button {
+      /* inline style: 18px */
+      font-size: 14px !important;
+
+      /* inline style: 18px */
+      line-height: 14px !important;
+
+      /* Revert to .fa-fw */
+      i.fa-retweet {
+        /* 19px */
+        height: 14px;
+
+        /* 22px */
+        width: 18px;
+
+        /* 22px, from the SVG */
+        background-size: 16px;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+
+  .poll {
+    /* 16px */
+    margin-top: 12px;
+
+    li {
+      /* 10px */
+      margin-bottom: 0;
+    }
+  }
+
+  .status .media-gallery {
+    margin-top: 6px;
+  }
+
+  .status .attachment-list {
+    margin-top: 2px;
+  }
+
+  /* Notification item */
+  .notification {
+    .account {
+      /* 16px */
+      padding: 12px;
+    }
+  }
+
+  /* Account view */
+  .account__header__bar {
+    /* 0 20px */
+    padding: 0 12px;
+
+    .account__header__tabs__name {
+      /* 16px 0 */
+      margin: 12px 0;
+    }
+
+    .account__header__bio {
+      .account__header__fields {
+        /* 16px */
+        margin-top: 12px;
+
+        dl {
+          /* 11px 16px */
+          padding: 8px 12px;
+        }
+      }
+    }
+
+    .account__header__extra__links {
+      margin: 0 -8px;
+      padding-top: 12px;
+    }
+  }
+
+  /* Drawer */
+  .drawer__inner .navigation-bar {
+    /* 15px */
+    padding: 12px;
+  }
+
+  .drawer__inner .compose-form {
+    /* 15px */
+    padding: 12px;
+    padding-top: 0;
+  }
+}
