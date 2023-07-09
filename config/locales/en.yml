@@ -1009,6 +1009,7 @@ en:
   appearance:
     advanced_web_interface: Advanced web interface
     advanced_web_interface_hint: 'If you want to make use of your entire screen width, the advanced web interface allows you to configure many different columns to see as much information at the same time as you want: Home, notifications, federated timeline, any number of lists and hashtags.'
+    optional_feature: Optional feature (exclusive to this server)
     animations_and_accessibility: Animations and accessibility
     confirmation_dialogs: Confirmation dialogs
     discovery: Discovery
@@ -1734,6 +1735,7 @@ en:
     contrast: Mastodon (High contrast)
     default: Mastodon (Dark)
     mastodon-light: Mastodon (Light)
+    big-publish: Enable big publish-button
   time:
     formats:
       default: "%b %d, %Y, %H:%M"
