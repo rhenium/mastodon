@@ -23,6 +23,9 @@
   .fields-group
     = f.input :setting_webui_styles, collection: ApplicationHelper::WEBUI_STYLES.keys, label_method: lambda { |item| t("simple_form.hints.defaults.setting_webui_styles_#{item}") }, wrapper: :with_label, include_blank: false, hint: t('simple_form.hints.defaults.setting_webui_styles_hint')
 
+  .fields-group
+    = f.input :setting_font_size, collection: ApplicationHelper::FONT_SIZES, label_method: lambda { |item| t("simple_form.hints.defaults.setting_font_size_#{item}") }, wrapper: :with_label, include_blank: false, hint: false
+
   %h4= t 'appearance.advanced_web_interface'
 
   %p.hint= t 'appearance.advanced_web_interface_hint'

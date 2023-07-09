@@ -1,0 +1,51 @@
+:root {
+  --content-font-size: 15px;
+  /* 22px by default, 22/15=1.4666... */
+  --content-line-height: 1.47em;
+}
+
+.font-size-smallest {
+  --content-font-size: 12px;
+}
+
+.font-size-small {
+  --content-font-size: 13px;
+}
+
+.font-size-medium {
+  --content-font-size: 14px;
+}
+
+.font-size-large {
+  --content-font-size: 15px;
+}
+
+.font-size-largest {
+  --content-font-size: 16px;
+}
+
+.status__info,
+.status__prepend,
+.status__content,
+.status__content__read-more-button,
+.translate-button,
+.reply-indicator__content,
+.notification__message,
+.notification__report__details {
+  font-size: var(--content-font-size) !important;
+  line-height: var(--content-line-height);
+
+  .emojione {
+    min-width: var(--content-line-height) !important;
+    height: var(--content-line-height) !important;
+  }
+}
+
+.status__info {
+
+  .status__relative-time,
+  .status__display-name {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}

@@ -73,6 +73,7 @@ defaults: &defaults
   backups_retention_period: 7
   bigger_publish: false
   webui_styles: 'default'
+  font_size: 'large'
 
 development:
   <<: *defaults

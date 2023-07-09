@@ -63,6 +63,11 @@ en:
         setting_webui_styles_hint: You can make padding/margin tighter like previous version
         setting_webui_styles_default: Default
         setting_webui_styles_compact: Compact
+        setting_font_size_smallest: Smallest
+        setting_font_size_small: Small
+        setting_font_size_medium: Medium
+        setting_font_size_large: Large
+        setting_font_size_largest: Largeest
         username: Your username will be unique on %{domain}
         whole_word: When the keyword or phrase is alphanumeric only, it will only be applied if it matches the whole word
       domain_allow:
@@ -223,6 +228,7 @@ en:
         setting_use_pending_items: Slow mode
         setting_bigger_publish: Use bigger publish button
         setting_webui_styles: WebUI styles
+        setting_font_size: Content font size
         severity: Severity
         sign_in_token_attempt: Security code
         title: Title

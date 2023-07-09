@@ -138,6 +138,7 @@ class User < ApplicationRecord
            :disable_swiping, :always_send_emails,
            :bigger_publish,
            :webui_styles,
+           :font_size,
            to: :settings, prefix: :setting, allow_nil: false
 
   delegate :can?, to: :role
