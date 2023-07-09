@@ -138,4 +138,8 @@ module HasUserSettings
   def hide_all_media?
     settings['web.display_media'] == 'hide_all'
   end
+
+  def setting_bigger_publish
+    settings['web.mod_bigger_publish']
+  end
 end
