@@ -70,8 +70,27 @@ module Mastodon
       end
 
       unless options[:prune_profiles] || options[:remove_headers]
-        processed, aggregate = parallelize_with_progress(MediaAttachment.cached.where.not(remote_url: '').where(created_at: ..time_ago)) do |media_attachment|
+        skipped = Concurrent::AtomicFixnum.new(0)
+        attachements = MediaAttachment.cached.where.not(remote_url: '').where(created_at: ..time_ago)
+          .includes(account: [:passive_relationships, :follow_requests_received])
+          .includes(status: [:status_stat, :bookmarks])
+        processed, aggregate = parallelize_with_progress(attachements) do |media_attachment|
           next if media_attachment.file.blank?
+          if media_attachment.account.passive_relationships.any? || media_attachment.account.follow_requests_received.any?
+            say("Skipping #{media_attachment.account.acct}'s attachment because it is followed by someone locally", :yellow)
+            skipped.increment
+            next
+          end
+          if ss = media_attachment.status&.status_stat and ss.reblogs_count > 0 || ss.favourites_count > 0
+            say("Skipping #{media_attachment.account.acct}'s attachment because it has at least one fav or reblog", :yellow)
+            skipped.increment
+            next
+          end
+          if media_attachment.status&.bookmarks&.any?
+            say("Skipping #{media_attachment.account.acct}'s attachment because it has at least one bookmark", :yellow)
+            skipped.increment
+            next
+          end
 
           size = (media_attachment.file_file_size || 0) + (media_attachment.thumbnail_file_size || 0)
 
@@ -84,7 +103,7 @@ module Mastodon
           size
         end
 
-        say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)})#{dry_run}", :green, true)
+        say("Removed #{processed} media attachments (approx. #{number_to_human_size(aggregate)}; skipped #{skipped.value} attachments)#{dry_run}", :green, true)
       end
     end
 
