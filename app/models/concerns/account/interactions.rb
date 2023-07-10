@@ -74,6 +74,7 @@ module Account::Interactions
   included do
     # Follow relations
     has_many :follow_requests, dependent: :destroy
+    has_many :follow_requests_received, class_name: 'FollowRequest', foreign_key: 'target_account_id'
 
     with_options class_name: 'Follow', dependent: :destroy do
       has_many :active_relationships,  foreign_key: 'account_id', inverse_of: :account
