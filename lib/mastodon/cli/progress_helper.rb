@@ -30,6 +30,7 @@ module Mastodon::CLI
       reset_connection_pools!
 
       progress  = create_progress_bar(scope.count)
+      @__progress = progress
       pool      = Concurrent::FixedThreadPool.new(options[:concurrency])
       total     = Concurrent::AtomicFixnum.new(0)
       aggregate = Concurrent::AtomicFixnum.new(0)
