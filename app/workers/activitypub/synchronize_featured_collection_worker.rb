@@ -3,7 +3,7 @@
 class ActivityPub::SynchronizeFeaturedCollectionWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: 'pull', lock: :until_executed, lock_ttl: 1.day.to_i
+  sidekiq_options queue: 'pull', lock: :until_executed, lock_ttl: 1.day.to_i, lock_args_method: :lock_args
 
   def perform(account_id, options = {})
     options = { note: true, hashtag: false }.deep_merge(options.deep_symbolize_keys)
@@ -11,5 +11,10 @@ class ActivityPub::SynchronizeFeaturedCollectionWorker
     ActivityPub::FetchFeaturedCollectionService.new.call(Account.find(account_id), **options)
   rescue ActiveRecord::RecordNotFound
     true
+  end
+
+  def self.lock_args(args)
+    # Ignore options
+    [args.first]
   end
 end
