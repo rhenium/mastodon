@@ -30,10 +30,6 @@ class TranslateButton extends React.PureComponent {
           <div className='translate-button__meta'>
             <FormattedMessage id='status.translated_from_with' defaultMessage='Translated from {lang} using {provider}' values={{ lang: languageName, provider }} />
           </div>
-
-          <button className='link-button' onClick={onClick}>
-            <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-          </button>
         </div>
       );
     }
@@ -222,9 +218,11 @@ class StatusContent extends React.PureComponent {
     const renderReadMore = this.props.onClick && status.get('collapsed');
     const renderTranslate = translationEnabled && this.context.identity.signedIn && this.props.onTranslate && ['public', 'unlisted'].includes(status.get('visibility')) && status.get('contentHtml').length > 0 && status.get('language') !== null && intl.locale !== status.get('language');
 
-    const content = { __html: status.get('translation') ? status.getIn(['translation', 'content']) : status.get('contentHtml') };
+    const content = { __html: status.get('contentHtml') };
+    const contentTranslated = status.get('translation') ? { __html: status.getIn(['translation', 'content']) } : null;
     const spoilerContent = { __html: status.get('spoilerHtml') };
-    const lang = status.get('translation') ? intl.locale : status.get('language');
+    const lang = status.get('language');
+    const langTranslated = status.get('translation') ? intl.locale : null;
     const classNames = classnames('status__content', {
       'status__content--with-action': this.props.onClick && this.context.router,
       'status__content--with-spoiler': status.get('spoiler_text').length > 0,
@@ -274,6 +272,8 @@ class StatusContent extends React.PureComponent {
 
           {!hidden && poll}
           {!hidden && translateButton}
+          {contentTranslated &&
+          <div tabIndex={!hidden ? 0 : null} className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''} translate`} lang={langTranslated} dangerouslySetInnerHTML={contentTranslated} />}
         </div>
       );
     } else if (this.props.onClick) {
@@ -284,6 +284,8 @@ class StatusContent extends React.PureComponent {
 
             {poll}
             {translateButton}
+            {contentTranslated &&
+            <div className='status__content__text status__content__text--visible translate' lang={langTranslated} dangerouslySetInnerHTML={contentTranslated} />}
           </div>
 
           {readMoreButton}
@@ -296,6 +298,8 @@ class StatusContent extends React.PureComponent {
 
           {poll}
           {translateButton}
+          {contentTranslated &&
+          <div className='status__content__text status__content__text--visible translate' lang={langTranslated} dangerouslySetInnerHTML={contentTranslated} />}
         </div>
       );
     }
