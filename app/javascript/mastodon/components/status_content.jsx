@@ -28,7 +28,7 @@ const MAX_HEIGHT = 706; // 22px * 32 (+ 2px padding at the top)
  * @returns {string}
  */
 export function getStatusContent(status) {
-  return status.getIn(['translation', 'contentHtml']) || status.get('contentHtml');
+  return status.get('contentHtml');
 }
 
 class TranslateButton extends PureComponent {
@@ -48,15 +48,14 @@ class TranslateButton extends PureComponent {
 
       return (
         <div className='translate-button'>
-          <button className='link-button' onClick={onClick}>
-            <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-          </button>
-
           <div className='translate-button__meta'>
             <FormattedMessage id='status.translated_from_with' defaultMessage='Translated from {lang} using {provider}' values={{ lang: languageName, provider }} />
           </div>
         </div>
       );
+    }
+    if (!onClick) {
+      return <></>;
     }
 
     return (
@@ -191,7 +190,9 @@ class StatusContent extends PureComponent {
     const renderTranslate = this.props.onTranslate && this.props.identity.signedIn && ['public', 'unlisted'].includes(status.get('visibility')) && status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale);
 
     const content = statusContent ?? getStatusContent(status);
-    const language = status.getIn(['translation', 'language']) || status.get('language');
+    const contentTranslated = status.get('translation') ? status.getIn(['translation', 'contentHtml']) : null;
+    const language = status.get('language');
+    const languageTranslated = status.get('translation') ? status.getIn(['translation', 'language']) : null;
     const classNames = classnames('status__content', {
       'status__content--with-action': this.props.onClick && this.props.history,
       'status__content--collapsed': renderReadMore,
@@ -203,8 +204,8 @@ class StatusContent extends PureComponent {
       </button>
     );
 
-    const translateButton = renderTranslate && (
-      <TranslateButton onClick={this.handleTranslate} translation={status.get('translation')} />
+    const translateButton = (
+      <TranslateButton onClick={renderTranslate ? this.handleTranslate : undefined} translation={status.get('translation')} />
     );
 
     const poll = !!status.get('poll') && (
@@ -231,6 +232,13 @@ class StatusContent extends PureComponent {
 
             {poll}
             {translateButton}
+            {contentTranslated &&
+            <EmojiHTML
+              className='status__content__text status__content__text--visible translate'
+              lang={languageTranslated}
+              htmlString={contentTranslated}
+              extraEmojis={status.get('emojis')}
+            />}
           </div>
 
           {readMoreButton}
@@ -249,6 +257,13 @@ class StatusContent extends PureComponent {
 
           {poll}
           {translateButton}
+          {contentTranslated &&
+          <EmojiHTML
+            className='status__content__text status__content__text--visible translate'
+            lang={languageTranslated}
+            htmlString={contentTranslated}
+            extraEmojis={status.get('emojis')}
+          />}
         </div>
       );
     }
