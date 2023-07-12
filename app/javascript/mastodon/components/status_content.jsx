@@ -22,7 +22,7 @@ const MAX_HEIGHT = 706; // 22px * 32 (+ 2px padding at the top)
  * @returns {string}
  */
 export function getStatusContent(status) {
-  return status.getIn(['translation', 'contentHtml']) || status.get('contentHtml');
+  return status.get('contentHtml');
 }
 
 class TranslateButton extends PureComponent {
@@ -45,10 +45,6 @@ class TranslateButton extends PureComponent {
           <div className='translate-button__meta'>
             <FormattedMessage id='status.translated_from_with' defaultMessage='Translated from {lang} using {provider}' values={{ lang: languageName, provider }} />
           </div>
-
-          <button className='link-button' onClick={onClick}>
-            <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-          </button>
         </div>
       );
     }
@@ -248,8 +244,11 @@ class StatusContent extends PureComponent {
     const renderTranslate = this.props.onTranslate && this.context.identity.signedIn && ['public', 'unlisted'].includes(status.get('visibility')) && status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale);
 
     const content = { __html: statusContent ?? getStatusContent(status) };
-    const spoilerContent = { __html: status.getIn(['translation', 'spoilerHtml']) || status.get('spoilerHtml') };
-    const language = status.getIn(['translation', 'language']) || status.get('language');
+    const contentTranslated = status.get('translation') ? { __html: status.getIn(['translation', 'contentHtml']) } : null;
+    const spoilerContent = { __html: status.get('spoilerHtml') };
+    const spoilerContentTranslated = status.get('translation') ? { __html: status.getIn(['translation', 'spoilerHtml']) } : null;
+    const language = status.get('language');
+    const languageTranslated = status.get('translation') ? status.getIn(['translation', 'language']) : null;
     const classNames = classnames('status__content', {
       'status__content--with-action': this.props.onClick && this.props.history,
       'status__content--with-spoiler': status.get('spoiler_text').length > 0,
@@ -299,6 +298,11 @@ class StatusContent extends PureComponent {
 
           {!hidden && poll}
           {translateButton}
+          {spoilerContentTranslated &&
+          <span dangerouslySetInnerHTML={spoilerContentTranslated} className='translate' lang={languageTranslated} />}
+          {spoilerContentTranslated && !hidden && ' '}
+          {contentTranslated &&
+          <div tabIndex={!hidden ? 0 : null} className={`status__content__text ${!hidden ? 'status__content__text--visible' : ''} translate`} lang={languageTranslated} dangerouslySetInnerHTML={contentTranslated} />}
         </div>
       );
     } else if (this.props.onClick) {
@@ -309,6 +313,8 @@ class StatusContent extends PureComponent {
 
             {poll}
             {translateButton}
+            {contentTranslated &&
+            <div className='status__content__text status__content__text--visible translate' lang={languageTranslated} dangerouslySetInnerHTML={contentTranslated} />}
           </div>
 
           {readMoreButton}
@@ -321,6 +327,8 @@ class StatusContent extends PureComponent {
 
           {poll}
           {translateButton}
+          {contentTranslated &&
+          <div className='status__content__text status__content__text--visible translate' lang={languageTranslated} dangerouslySetInnerHTML={contentTranslated} />}
         </div>
       );
     }
