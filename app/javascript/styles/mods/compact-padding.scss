@@ -30,6 +30,12 @@
     padding-top: 12px;
   }
 
+  .translate-button {
+    /* margin-top: 16px -> be consistent with .status__content__read-more-button */
+    margin-top: 0;
+    padding-top: 12px;
+  }
+
   .status__action-bar {
     margin-top: 6px;
     justify-content: flex-start;
