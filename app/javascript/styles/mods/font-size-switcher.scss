@@ -39,6 +39,11 @@
     min-width: var(--content-line-height) !important;
     height: var(--content-line-height) !important;
   }
+
+  .poll {
+    /* 14px */
+    font-size: inherit !important;
+  }
 }
 
 .status__info {
