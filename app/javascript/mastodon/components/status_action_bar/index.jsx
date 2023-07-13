@@ -65,12 +65,14 @@ const messages = defineMessages({
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
   revokeQuote: { id: 'status.revoke_quote', defaultMessage: 'Remove my post from @{name}’s post' },
   quotePolicyChange: { id: 'status.quote_policy_change', defaultMessage: 'Change who can quote' },
+  translate: { id: 'status.translate', defaultMessage: 'Translate' },
 });
 
 const mapStateToProps = (state, { status }) => {
   const quotedStatusId = status.getIn(['quote', 'quoted_status']);
   return ({
     relationship: state.getIn(['relationships', status.getIn(['account', 'id'])]),
+    languages: state.getIn(['server', 'translationLanguages', 'items']),
     quotedAccountId: quotedStatusId ? state.getIn(['statuses', quotedStatusId, 'account']) : null,
     statusQuoteState: selectStatusConditions(state, status.get('id')),
   });
@@ -105,9 +107,11 @@ class StatusActionBar extends ImmutablePureComponent {
     onFilter: PropTypes.func,
     onAddFilter: PropTypes.func,
     onInteractionModal: PropTypes.func,
+    onTranslate: PropTypes.func,
     withDismiss: PropTypes.bool,
     withCounters: PropTypes.bool,
     scrollKey: PropTypes.string,
+    languages: ImmutablePropTypes.map,
     intl: PropTypes.object.isRequired,
     ...WithRouterPropTypes,
   };
@@ -250,6 +254,11 @@ class StatusActionBar extends ImmutablePureComponent {
     navigator.clipboard.writeText(url);
   };
 
+
+  handleTranslate = () => {
+    this.props.onTranslate(this.props.status);
+  };
+
   render () {
     const { status, relationship, statusQuoteState, quotedAccountId, contextType, intl, withDismiss, withCounters, scrollKey } = this.props;
     const { signedIn, permissions } = this.props.identity;
@@ -294,6 +303,12 @@ class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (signedIn) {
+      // 2023-07-13: Conditions aken from app/javascript/mastodon/components/status_content.jsx
+      const contentLocale = intl.locale.replace(/[_-].*/, '');
+      const targetLanguages = this.props.languages?.get(status.get('language') || 'und');
+      if (status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale)) {
+        menu.push({ text: intl.formatMessage(messages.translate), action: this.handleTranslate });
+      }
       menu.push(null);
 
       if (writtenByMe && pinnableStatus) {
