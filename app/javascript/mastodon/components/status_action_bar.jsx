@@ -67,10 +67,12 @@ const messages = defineMessages({
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   filter: { id: 'status.filter', defaultMessage: 'Filter this post' },
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
+  translate: { id: 'status.translate', defaultMessage: 'Translate' },
 });
 
 const mapStateToProps = (state, { status }) => ({
   relationship: state.getIn(['relationships', status.getIn(['account', 'id'])]),
+  languages: state.getIn(['server', 'translationLanguages', 'items']),
 });
 
 class StatusActionBar extends ImmutablePureComponent {
@@ -102,9 +104,11 @@ class StatusActionBar extends ImmutablePureComponent {
     onFilter: PropTypes.func,
     onAddFilter: PropTypes.func,
     onInteractionModal: PropTypes.func,
+    onTranslate: PropTypes.func,
     withDismiss: PropTypes.bool,
     withCounters: PropTypes.bool,
     scrollKey: PropTypes.string,
+    languages: ImmutablePropTypes.map,
     intl: PropTypes.object.isRequired,
     ...WithRouterPropTypes,
   };
@@ -248,6 +252,10 @@ class StatusActionBar extends ImmutablePureComponent {
     this.props.onFilter();
   };
 
+  handleTranslate = () => {
+    this.props.onTranslate(this.props.status);
+  };
+
   render () {
     const { status, relationship, intl, withDismiss, withCounters, scrollKey } = this.props;
     const { signedIn, permissions } = this.context.identity;
@@ -278,6 +286,12 @@ class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (signedIn) {
+      // 2023-07-13: Conditions aken from app/javascript/mastodon/components/status_content.jsx
+      const contentLocale = intl.locale.replace(/[_-].*/, '');
+      const targetLanguages = this.props.languages?.get(status.get('language') || 'und');
+      if (status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale)) {
+        menu.push({ text: intl.formatMessage(messages.translate), action: this.handleTranslate });
+      }
       menu.push(null);
 
       menu.push({ text: intl.formatMessage(status.get('bookmarked') ? messages.removeBookmark : messages.bookmark), action: this.handleBookmarkClick });
