@@ -56,12 +56,14 @@ const messages = defineMessages({
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
   revokeQuote: { id: 'status.revoke_quote', defaultMessage: 'Remove my post from @{name}’s post' },
   quotePolicyChange: { id: 'status.quote_policy_change', defaultMessage: 'Change who can quote' },
+  translate: { id: 'status.translate', defaultMessage: 'Translate' },
 });
 
 const mapStateToProps = (state, { status }) => {
   const quotedStatusId = status.getIn(['quote', 'quoted_status']);
   return ({
     relationship: state.getIn(['relationships', status.getIn(['account', 'id'])]),
+    languages: state.getIn(['server', 'translationLanguages', 'items']),
     quotedAccountId: quotedStatusId ? state.getIn(['statuses', quotedStatusId, 'account']) : null,
     statusQuoteState: selectStatusConditions(state, status.get('id')),
   });
@@ -94,6 +96,8 @@ class ActionBar extends PureComponent {
     onReport: PropTypes.func,
     onPin: PropTypes.func,
     onEmbed: PropTypes.func,
+    onTranslate: PropTypes.func,
+    languages: ImmutablePropTypes.map,
     intl: PropTypes.object.isRequired,
   };
 
@@ -208,6 +212,10 @@ class ActionBar extends PureComponent {
     navigator.clipboard.writeText(url);
   };
 
+  handleTranslate = () => {
+    this.props.onTranslate(this.props.status);
+  };
+
   render () {
     const { status, relationship, statusQuoteState, quotedAccountId, intl } = this.props;
     const { signedIn, permissions } = this.props.identity;
@@ -249,6 +257,12 @@ class ActionBar extends PureComponent {
     }
 
     if (signedIn) {
+      // 2023-07-13: Conditions aken from app/javascript/mastodon/components/status_content.jsx
+      const contentLocale = intl.locale.replace(/[_-].*/, '');
+      const targetLanguages = this.props.languages?.get(status.get('language') || 'und');
+      if (status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale)) {
+        menu.push({ text: intl.formatMessage(messages.translate), action: this.handleTranslate });
+      }
       menu.push(null);
 
       if (writtenByMe) {
