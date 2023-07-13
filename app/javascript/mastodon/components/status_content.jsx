@@ -40,9 +40,7 @@ class TranslateButton extends PureComponent {
     }
 
     return (
-      <button className='status__content__translate-button' onClick={onClick}>
-        <FormattedMessage id='status.translate' defaultMessage='Translate' />
-      </button>
+      <></>
     );
   }
 
