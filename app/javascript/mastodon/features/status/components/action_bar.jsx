@@ -46,10 +46,12 @@ const messages = defineMessages({
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   openOriginalPage: { id: 'account.open_original_page', defaultMessage: 'Open original page' },
+  translate: { id: 'status.translate', defaultMessage: 'Translate' },
 });
 
 const mapStateToProps = (state, { status }) => ({
   relationship: state.getIn(['relationships', status.getIn(['account', 'id'])]),
+  languages: state.getIn(['server', 'translationLanguages', 'items']),
 });
 
 class ActionBar extends PureComponent {
@@ -80,6 +82,8 @@ class ActionBar extends PureComponent {
     onReport: PropTypes.func,
     onPin: PropTypes.func,
     onEmbed: PropTypes.func,
+    onTranslate: PropTypes.func,
+    languages: ImmutablePropTypes.map,
     intl: PropTypes.object.isRequired,
   };
 
@@ -182,6 +186,10 @@ class ActionBar extends PureComponent {
     navigator.clipboard.writeText(url);
   };
 
+  handleTranslate = () => {
+    this.props.onTranslate(this.props.status);
+  };
+
   render () {
     const { status, relationship, intl } = this.props;
     const { signedIn, permissions } = this.context.identity;
@@ -210,6 +218,12 @@ class ActionBar extends PureComponent {
     }
 
     if (signedIn) {
+      // 2023-07-13: Conditions aken from app/javascript/mastodon/components/status_content.jsx
+      const contentLocale = intl.locale.replace(/[_-].*/, '');
+      const targetLanguages = this.props.languages?.get(status.get('language') || 'und');
+      if (status.get('search_index').trim().length > 0 && targetLanguages?.includes(contentLocale)) {
+        menu.push({ text: intl.formatMessage(messages.translate), action: this.handleTranslate });
+      }
       menu.push(null);
 
       if (writtenByMe) {
