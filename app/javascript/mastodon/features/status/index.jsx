@@ -700,6 +700,7 @@ class Status extends ImmutablePureComponent {
                   onReport={this.handleReport}
                   onPin={this.handlePin}
                   onEmbed={this.handleEmbed}
+                  onTranslate={this.handleTranslate}
                 />
               </div>
             </HotKeys>
