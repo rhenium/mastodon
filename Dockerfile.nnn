@@ -1,0 +1,132 @@
+# syntax=docker/dockerfile:1.8
+
+# Prepare node
+FROM node:24-trixie-slim AS node
+# Remove symlinks to yarn v1
+# See https://github.com/nodejs/docker-node/blob/main/24/trixie-slim/Dockerfile
+RUN rm /usr/local/bin/yarn*
+
+# Prepare a base image for building Ruby and for installing gems which may
+# require native extensions
+FROM debian:trixie-20260316-slim AS build-deps
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  build-essential curl ca-certificates \
+  pkg-config \
+  ;
+
+# Build ruby
+FROM build-deps AS ruby
+RUN apt-get install -y --no-install-recommends \
+  rustc \
+  libffi-dev libgmp-dev libjemalloc-dev libssl-dev libyaml-dev zlib1g-dev \
+  ;
+
+WORKDIR /root/ruby
+RUN curl -L https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.6.tar.gz | \
+  tar xz --strip-components=1
+RUN ./configure \
+  --prefix=/opt/ruby \
+  --disable-install-doc \
+  --with-jemalloc \
+  --enable-yjit \
+  && \
+  make -j8 && \
+  make install
+
+# Install runtime dependencies
+FROM ruby AS precompile-deps
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  # Ruby dependencies
+  git \
+  libicu-dev \
+  libidn-dev \
+  libpq-dev \
+  shared-mime-info \
+  # Node dependencies
+  python3 \
+  # Asset compilation dependencies
+  libvips42t64 \
+  ;
+COPY --link --from=node /usr/local/bin /usr/local/bin
+COPY --link --from=node /usr/local/lib /usr/local/lib
+ENV PATH="${PATH}:/opt/ruby/bin"
+
+COPY Gemfile* package.json yarn.lock .yarnrc.yml /opt/mastodon/
+COPY streaming/package.json /opt/mastodon/streaming/
+
+WORKDIR /opt/mastodon
+RUN bundle config set --local deployment 'true' && \
+  bundle config set --local without 'development test' && \
+  bundle config set --local silence_root_warning true && \
+  bundle install -j8
+RUN corepack enable && \
+  corepack install && \
+  yarn workspaces focus --all --production
+
+# Precompile rails assets
+FROM precompile-deps AS precompile
+COPY . /opt/mastodon/
+RUN \
+  RAILS_ENV="production" \
+  NODE_ENV="production" \
+  SECRET_KEY_BASE_DUMMY=1 \
+  bundle exec rails assets:precompile
+
+# Build the final image
+FROM debian:trixie-slim
+ARG UID="991"
+ARG GID="991"
+
+RUN groupadd -g "${GID}" mastodon && \
+  useradd -l -u "$UID" -g "${GID}" -m -d /opt/mastodon mastodon && \
+  ln -s /opt/mastodon /mastodon
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  ca-certificates \
+  tzdata \
+  libffi8 libgmp10 libjemalloc2 openssl libyaml-0-2 zlib1g \
+  libicu76 \
+  libidn12 \
+  libpq5 \
+  file \
+  libvips42t64 \
+  ffmpeg \
+  # Docker dependencies
+  procps \
+  wget \
+  tini \
+  ;
+
+COPY --link --from=ruby /opt/ruby /opt/ruby
+COPY --link --from=node /usr/local/bin /usr/local/bin
+COPY --link --from=node /usr/local/lib /usr/local/lib
+
+COPY --chown=mastodon:mastodon . /opt/mastodon
+COPY --chown=mastodon:mastodon --from=precompile /opt/mastodon /opt/mastodon
+
+WORKDIR /opt/mastodon
+RUN corepack enable && \
+  corepack install
+
+# Set the run user
+USER mastodon
+ENV PATH="${PATH}:/opt/ruby/bin:/opt/mastodon/bin" \
+  RUBY_YJIT_ENABLE="1" \
+  RAILS_ENV="production" \
+  NODE_ENV="production" \
+  RAILS_SERVE_STATIC_FILES="true" \
+  MASTODON_SIDEKIQ_READY_FILENAME="sidekiq_process_has_started_and_will_begin_processing_jobs" \
+  MASTODON_VERSION_PRERELEASE="" \
+  MASTODON_VERSION_METADATA="nnn" \
+  GITHUB_REPOSITORY="rhenium/mastodon" \
+  SOURCE_TAG="nnn"
+
+# Precompile bootsnap code for faster Rails startup
+RUN bundle exec bootsnap precompile --gemfile app/ lib/
+
+# Set the work dir and the container entry point
+ENTRYPOINT ["/usr/bin/tini", "--"]
+EXPOSE 3000 4000
