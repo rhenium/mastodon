@@ -3,8 +3,8 @@
 # Prepare node
 FROM node:20-bookworm-slim as node
 
-# Prepare a base image for building Ruby and for installing gems which may
-# require native extensions
+# Prepare a base image for building Ruby, ImageMagick, and for installing gems
+# which may require compiling native extensions
 FROM debian:bookworm-slim as build-deps
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -25,6 +25,24 @@ RUN ./configure \
         --disable-install-doc \
         --with-jemalloc \
         --enable-yjit \
+        && \
+    make -j8 && \
+    make install
+
+# Build ImageMagick
+FROM build-deps as imagemagick
+RUN apt-get install -y --no-install-recommends \
+        libbz2-dev libdjvulibre-dev libfontconfig-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev liblcms-dev libopenexr-dev libturbojpeg0-dev liblqr-dev libraqm-dev libtiff-dev libwebp-dev libx11-dev libxml2-dev liblzma-dev \
+        libheif-dev
+
+WORKDIR /root/imagemagick
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -L https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.1-22.tar.gz | tar xz --strip-components=1
+RUN ./configure \
+        --prefix=/opt/imagemagick \
+        --with-quantum-depth=32 \
+        --without-magick-plus-plus \
+        --without-perl \
         && \
     make -j8 && \
     make install
@@ -81,12 +99,15 @@ RUN apt-get update && \
         libidn12 \
         libpq5 \
         file \
-        imagemagick \
         ffmpeg \
         # Docker dependencies
         procps \
         wget \
-        tini
+        tini \
+        # For ImageMagick
+        libbz2-1.0 libdjvulibre21 libfontconfig1 libfreetype6 libfribidi0 libharfbuzz0b liblcms2-2 libopenexr-3-1-30 libturbojpeg0 liblqr-1-0 libraqm0 libtiff6 libwebp7 libx11-6 libxml2 liblzma5 \
+        libheif1 \
+        libwebpdemux2 libwebpmux3
 
 COPY --link --from=ruby /opt/ruby /opt/ruby
 COPY --link --from=node /usr/local/bin /usr/local/bin
@@ -108,6 +129,12 @@ WORKDIR /opt/mastodon
 
 # Precompile assets
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile
+
+# Add ImageMagick here to allow parallel compilation with rails assets:precompile
+COPY --link --from=imagemagick /opt/imagemagick /opt/imagemagick
+ENV PATH="${PATH}:/opt/imagemagick/bin"
+RUN ldd /opt/imagemagick/bin/magick && \
+    magick -version
 
 # Set the work dir and the container entry point
 ENTRYPOINT ["/usr/bin/tini", "--"]
