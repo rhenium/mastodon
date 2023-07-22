@@ -1,97 +1,81 @@
 # syntax=docker/dockerfile:1.4
-# This needs to be bookworm-slim because the Ruby image is built on bookworm-slim
 ARG NODE_VERSION="20.6-bookworm-slim"
 
-FROM ghcr.io/moritzheiber/ruby-jemalloc:3.2.2-slim as ruby
-FROM node:${NODE_VERSION} as build
-
-COPY --link --from=ruby /opt/ruby /opt/ruby
-
-ENV DEBIAN_FRONTEND="noninteractive" \
-    PATH="${PATH}:/opt/ruby/bin"
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-WORKDIR /opt/mastodon
-COPY Gemfile* package.json yarn.lock /opt/mastodon/
-
-# hadolint ignore=DL3008
+# Build ruby
+FROM debian:bookworm-slim as ruby
 RUN apt-get update && \
-    apt-get -yq dist-upgrade && \
-    apt-get install -y --no-install-recommends build-essential \
-        git \
+    apt-get install -y --no-install-recommends \
+        build-essential curl ca-certificates \
+        bison rustc pkg-config \
+        libffi-dev libgmp-dev libjemalloc-dev libncurses-dev libreadline-dev libssl-dev libyaml-dev zlib1g-dev
+
+WORKDIR /root/ruby
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -L https://cache.ruby-lang.org/pub/ruby/3.2/ruby-3.2.2.tar.gz | tar xz --strip-components=1
+RUN ./configure \
+        --prefix=/opt/ruby \
+        --disable-install-doc \
+        --with-jemalloc \
+        --enable-yjit \
+        && \
+    make -j8 && \
+    make install
+
+# Install runtime dependencies
+FROM node:${NODE_VERSION} as build
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential git ca-certificates \
+        libffi-dev libgmp-dev libjemalloc-dev libncurses-dev libreadline-dev libssl-dev libyaml-dev zlib1g-dev \
         libicu-dev \
         libidn-dev \
         libpq-dev \
-        libjemalloc-dev \
-        zlib1g-dev \
-        libgdbm-dev \
-        libgmp-dev \
-        libssl-dev \
-        libyaml-0-2 \
-        ca-certificates \
-        libreadline8 \
         python3 \
-        shared-mime-info && \
-    bundle config set --local deployment 'true' && \
+        shared-mime-info
+
+COPY --link --from=ruby /opt/ruby /opt/ruby
+ENV PATH="${PATH}:/opt/ruby/bin"
+
+WORKDIR /opt/mastodon
+COPY Gemfile* package.json yarn.lock /opt/mastodon/
+RUN bundle config set --local deployment 'true' && \
     bundle config set --local without 'development test' && \
     bundle config set silence_root_warning true && \
     bundle install -j"$(nproc)" && \
-    yarn install --pure-lockfile --production --network-timeout 600000 && \
-    yarn cache clean
+    yarn install --pure-lockfile --production --network-timeout 600000
 
+# Build the final image
 FROM node:${NODE_VERSION}
-
-# Use those args to specify your own version flags & suffixes
-ARG MASTODON_VERSION_PRERELEASE=""
-ARG MASTODON_VERSION_METADATA=""
-
 ARG UID="991"
 ARG GID="991"
 
-COPY --link --from=ruby /opt/ruby /opt/ruby
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-ENV DEBIAN_FRONTEND="noninteractive" \
-    PATH="${PATH}:/opt/ruby/bin:/opt/mastodon/bin"
-
-# Ignoring these here since we don't want to pin any versions and the Debian image removes apt-get content after use
-# hadolint ignore=DL3008,DL3009
-RUN apt-get update && \
-    echo "Etc/UTC" > /etc/localtime && \
-    groupadd -g "${GID}" mastodon && \
+RUN groupadd -g "${GID}" mastodon && \
     useradd -l -u "$UID" -g "${GID}" -m -d /opt/mastodon mastodon && \
-    apt-get -y --no-install-recommends install whois \
-        wget \
-        procps \
-        libssl3 \
-        libpq5 \
-        imagemagick \
-        ffmpeg \
-        libjemalloc2 \
-        libicu72 \
-        libidn12 \
-        libyaml-0-2 \
-        file \
+    ln -s /opt/mastodon /mastodon
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         ca-certificates \
         tzdata \
-        libreadline8 \
-        tini && \
-    ln -s /opt/mastodon /mastodon
+        libffi8 libgmp10 libjemalloc2 libncurses6 libreadline8 openssl libyaml-0-2 zlib1g \
+        libicu72 \
+        libidn12 \
+        libpq5 \
+        file \
+        imagemagick \
+        ffmpeg \
+        # Docker dependencies
+        procps \
+        wget \
+        tini
 
-# Note: no, cleaning here since Debian does this automatically
-# See the file /etc/apt/apt.conf.d/docker-clean within the Docker image's filesystem
-
+COPY --link --from=ruby /opt/ruby /opt/ruby
 COPY --chown=mastodon:mastodon . /opt/mastodon
 COPY --chown=mastodon:mastodon --from=build /opt/mastodon /opt/mastodon
+ENV PATH="${PATH}:/opt/ruby/bin:/opt/mastodon/bin"
 
 ENV RAILS_ENV="production" \
     NODE_ENV="production" \
-    RAILS_SERVE_STATIC_FILES="true" \
-    BIND="0.0.0.0" \
-    MASTODON_VERSION_PRERELEASE="${MASTODON_VERSION_PRERELEASE}" \
-    MASTODON_VERSION_METADATA="${MASTODON_VERSION_METADATA}"
+    RAILS_SERVE_STATIC_FILES="true"
 
 # Set the run user
 USER mastodon
