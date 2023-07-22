@@ -21,6 +21,27 @@ RUN ./configure \
     make -j8 && \
     make install
 
+# Build ImageMagick
+FROM debian:bookworm-slim as imagemagick
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential curl ca-certificates \
+        pkg-config \
+        libbz2-dev libdjvulibre-dev libfontconfig-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev liblcms-dev libopenexr-dev libturbojpeg0-dev liblqr-dev libraqm-dev libtiff-dev libwebp-dev libx11-dev libxml2-dev liblzma-dev \
+        libheif-dev
+
+WORKDIR /root/imagemagick
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN curl -L https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.1-13.tar.gz | tar xz --strip-components=1
+RUN ./configure \
+        --prefix=/opt/imagemagick \
+        --with-quantum-depth=32 \
+        --without-magick-plus-plus \
+        --without-perl \
+        && \
+    make -j8 && \
+    make install
+
 # Install runtime dependencies
 FROM node:${NODE_VERSION} as build
 RUN apt-get update && \
@@ -61,7 +82,6 @@ RUN apt-get update && \
         libidn12 \
         libpq5 \
         file \
-        imagemagick \
         ffmpeg \
         # Docker dependencies
         procps \
@@ -73,9 +93,10 @@ RUN apt-get update && \
         libwebpdemux2 libwebpmux3
 
 COPY --link --from=ruby /opt/ruby /opt/ruby
+COPY --link --from=imagemagick /opt/imagemagick /opt/imagemagick
 COPY --chown=mastodon:mastodon . /opt/mastodon
 COPY --chown=mastodon:mastodon --from=build /opt/mastodon /opt/mastodon
-ENV PATH="${PATH}:/opt/ruby/bin:/opt/mastodon/bin"
+ENV PATH="${PATH}:/opt/imagemagick/bin:/opt/ruby/bin:/opt/mastodon/bin"
 
 ENV RAILS_ENV="production" \
     NODE_ENV="production" \
@@ -84,6 +105,10 @@ ENV RAILS_ENV="production" \
 # Set the run user
 USER mastodon
 WORKDIR /opt/mastodon
+
+# Smoke test ImageMagick
+RUN ldd /opt/imagemagick/bin/magick && \
+    magick -version
 
 # Precompile assets
 RUN OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder rails assets:precompile
