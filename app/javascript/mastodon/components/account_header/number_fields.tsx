@@ -6,6 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { openModal } from '@/mastodon/actions/modal';
 import { useAccount } from '@/mastodon/hooks/useAccount';
 import { useAppDispatch } from '@/mastodon/store';
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 
 import { FormattedDateWrapper } from '../formatted_date';
 import { NumberFields, NumberFieldsItem } from '../number_fields';
@@ -67,7 +68,7 @@ export const AccountNumberFields: FC<{ accountId: string }> = ({
         label={
           <FormattedMessage id='account.joined_short' defaultMessage='Joined' />
         }
-        hint={intl.formatDate(account.created_at)}
+        hint={intlFixes.formatDate(account.created_at)}
       >
         <button type='button' onClick={showJoinModal}>
           {createdThisYear ? (

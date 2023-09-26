@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import type { Account, AccountShapeFull } from '@/mastodon/models/account';
 import { selectAccountStatus } from '@/mastodon/selectors/statuses';
 import { useAppSelector } from '@/mastodon/store';
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 
 import { Avatar } from '../avatar';
 import { AvatarOverlay } from '../avatar_overlay';
@@ -94,7 +95,7 @@ const StatusEditedAt: FC<{ editedAt: string }> = ({ editedAt }) => {
   return (
     <abbr
       title={intl.formatMessage(editMessage, {
-        date: intl.formatDate(editedAt, {
+        date: intlFixes.formatDate(editedAt, {
           year: 'numeric',
           month: 'short',
           day: '2-digit',

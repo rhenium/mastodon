@@ -13,6 +13,7 @@ import { useAccount } from '@/mastodon/hooks/useAccount';
 import { useResizeObserver } from '@/mastodon/hooks/useObserver';
 import type { AccountFieldShape } from '@/mastodon/models/account';
 import { useAppDispatch } from '@/mastodon/store';
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 import MoreIcon from '@/material-icons/400-24px/more_horiz.svg?react';
 
 import { CustomEmojiProvider } from '../emoji/context';
@@ -29,13 +30,13 @@ const verifyMessage = defineMessage({
   id: 'account.link_verified_on',
   defaultMessage: 'Ownership of this link was checked on {date}',
 });
-const dateFormatOptions: Intl.DateTimeFormatOptions = {
+const dateFormatOptions = {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
-};
+} satisfies Intl.DateTimeFormatOptions;
 
 export interface AccountField extends AccountFieldShape {
   nameHasEmojis: boolean;
@@ -159,7 +160,7 @@ const FieldCard: FC<{
         <span
           className={classes.fieldVerifiedIcon}
           title={intl.formatMessage(verifyMessage, {
-            date: intl.formatDate(verified_at, dateFormatOptions),
+            date: intlFixes.formatDate(verified_at, dateFormatOptions),
           })}
         >
           <Icon id='verified' icon={IconVerified} noFill />
