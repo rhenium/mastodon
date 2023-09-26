@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import {
-  FormattedMessage,
-  FormattedDate,
-  useIntl,
-  defineMessages,
-} from 'react-intl';
+import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 
 import { Link, useParams } from 'react-router-dom';
 
@@ -15,6 +10,7 @@ import { NavigationFocusTarget } from '@/mastodon/components/navigation_focus_ta
 import { apiGetTermsOfService } from 'mastodon/api/instance';
 import type { ApiTermsOfServiceJSON } from 'mastodon/api_types/instance';
 import { Column } from 'mastodon/components/column';
+import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
 import { BundleColumnError } from 'mastodon/features/ui/components/bundle_column_error';
 
 import { getColumnSkipLinkId } from '../ui/components/skip_links';
@@ -71,7 +67,7 @@ const TermsOfService: React.FC<{
                 defaultMessage='Last updated {date}'
                 values={{
                   date: (
-                    <FormattedDate
+                    <FormattedDateWrapper
                       value={response.effective_date}
                       year='numeric'
                       month='short'
@@ -86,7 +82,7 @@ const TermsOfService: React.FC<{
                 defaultMessage='Effective as of {date}'
                 values={{
                   date: (
-                    <FormattedDate
+                    <FormattedDateWrapper
                       value={response?.effective_date}
                       year='numeric'
                       month='short'
@@ -106,7 +102,7 @@ const TermsOfService: React.FC<{
                     defaultMessage='Upcoming changes on {date}'
                     values={{
                       date: (
-                        <FormattedDate
+                        <FormattedDateWrapper
                           value={response.succeeded_by}
                           year='numeric'
                           month='short'
