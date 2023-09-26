@@ -9,6 +9,7 @@ import ClockIcon from '@/images/icons/icon_clock.svg?react';
 import FollowerIcon from '@/images/icons/icon_follower.svg?react';
 import IconVerified from '@/images/icons/icon_verified.svg?react';
 import type { OnAttributeHandler } from '@/mastodon/utils/html';
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 import BlockIcon from '@/material-icons/400-24px/block.svg?react';
 import GroupsIcon from '@/material-icons/400-24px/group.svg?react';
 import PersonIcon from '@/material-icons/400-24px/person.svg?react';
@@ -129,7 +130,8 @@ export const MutedBadge: FC<
     const expiresDate = new Date(expiresAt);
     const isCurrentYear =
       expiresDate.getFullYear() === new Date().getFullYear();
-    formattedDate = intl.formatDate(expiresDate, {
+    void intl;
+    formattedDate = intlFixes.formatDate(expiresDate, {
       month: 'short',
       day: 'numeric',
       ...(isCurrentYear ? {} : { year: 'numeric' }),
