@@ -6,6 +6,7 @@ import { CheckIcon } from '@phosphor-icons/react';
 
 import { Icon } from 'mastodon/components/icon';
 import type { Account } from 'mastodon/models/account';
+import { intlFixes } from 'mastodon/utils/intl_fixes';
 
 import { EmojiHTML } from './emoji/html';
 import { useElementHandledLink } from './status/handled_link';
@@ -43,7 +44,10 @@ export const AccountFields: React.FC<Pick<Account, 'fields' | 'emojis'>> = ({
                       'Ownership of this link was checked on {date}',
                   },
                   {
-                    date: intl.formatDate(pair.verified_at, dateFormatOptions),
+                    date: intlFixes.formatDate(
+                      pair.verified_at,
+                      dateFormatOptions,
+                    ),
                   },
                 )}
               >
@@ -63,10 +67,10 @@ export const AccountFields: React.FC<Pick<Account, 'fields' | 'emojis'>> = ({
   );
 };
 
-const dateFormatOptions: Intl.DateTimeFormatOptions = {
+const dateFormatOptions = {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
-};
+} satisfies Intl.DateTimeFormatOptions;
