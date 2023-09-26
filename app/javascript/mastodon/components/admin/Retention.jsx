@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types';
 import { PureComponent } from 'react';
 
-import { FormattedMessage, FormattedNumber, FormattedDate } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 
 import classNames from 'classnames';
 
 import api from 'mastodon/api';
+import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
 import { roundTo10 } from 'mastodon/utils/numbers';
 
 const dateForCohort = cohort => {
   const timeZone = 'UTC';
   switch(cohort.frequency) {
   case 'day':
-    return <FormattedDate value={cohort.period} month='long' day='2-digit' timeZone={timeZone} />;
+    return <FormattedDateWrapper value={cohort.period} month='long' day='2-digit' timeZone={timeZone} />;
   default:
-    return <FormattedDate value={cohort.period} month='long' year='numeric' timeZone={timeZone} />;
+    return <FormattedDateWrapper value={cohort.period} month='long' year='numeric' timeZone={timeZone} />;
   }
 };
 
