@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import { FormattedDate, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
 import { Link, withRouter } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { WithRouterPropTypes } from 'mastodon/utils/react_router';
 
 import { Avatar } from '../../../components/avatar';
 import { DisplayName } from '../../../components/display_name';
+import { timeString } from '../../../components/relative_timestamp';
 import MediaGallery from '../../../components/media_gallery';
 import StatusContent from '../../../components/status_content';
 import Audio from '../../audio';
@@ -311,7 +312,7 @@ class DetailedStatus extends ImmutablePureComponent {
 
           <div className='detailed-status__meta'>
             <a className='detailed-status__datetime' href={status.get('url')} target='_blank' rel='noopener noreferrer'>
-              <FormattedDate value={new Date(status.get('created_at'))} hour12={false} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
+              <time dateTime={status.get('created_at')}>{timeString(new Date(status.get('created_at')), null, true)}</time>
             </a>{edited}{visibilityLink}{applicationLink}{reblogLink} · {favouriteLink}
           </div>
         </div>
