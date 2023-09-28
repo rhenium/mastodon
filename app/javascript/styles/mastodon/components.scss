@@ -880,7 +880,7 @@ body > [data-popper-placement] {
 
 .character-counter {
   cursor: default;
-  font-family: $font-sans-serif, sans-serif;
+  font-family: var(--font-system-ui);
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
@@ -7107,7 +7107,7 @@ noscript {
       width: 100%;
       border: 0;
       padding: 10px;
-      font-family: $font-monospace, monospace;
+      font-family: var(--font-monospace);
       background: $ui-base-color;
       color: $primary-text-color;
       font-size: 14px;

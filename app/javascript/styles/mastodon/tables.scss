@@ -117,7 +117,7 @@
 }
 
 samp {
-  font-family: $font-monospace, monospace;
+  font-family: var(--font-monospace);
 }
 
 button.table-action-link {
