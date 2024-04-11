@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { Link } from 'react-router-dom';
 
+import { AccountLink } from '@/mastodon/components/link';
 import { useAccountStatus } from '@/mastodon/hooks/useStatus';
 import type { ExpandedStatusShape } from '@/mastodon/models/status';
 import { selectPlainAccount } from '@/mastodon/selectors/accounts';
@@ -16,7 +17,7 @@ import { RelativeTimestamp } from '../relative_timestamp';
 
 import { StatusBoostIcon } from './icons';
 import classes from './prepend.module.scss';
-import { statusLink } from './utils';
+import { accountStatusLinkProps, statusLink } from './utils';
 
 export const StatusPrepend: React.FC<{
   status: ExpandedStatusShape;
@@ -50,32 +51,23 @@ const StatusPrependReblog: React.FC<{ reblogId: string }> = ({ reblogId }) => {
   }
 
   const account = status.account;
-  const accountLinkProps = {
-    to: {
-      pathname: `/@${account.acct}`,
-      state: { reference: 'status' },
-    },
-    title: `@${account.acct}`,
-    'data-id': account.id,
-    'data-hover-card-account': account.id,
-    'data-hover-card-reference': 'status',
-  };
+  const accountLinkProps = accountStatusLinkProps(account);
   return (
     <div className={classes.root}>
       <Icon icon={StatusBoostIcon} className={classes.reblogIcon} />
 
       <span className={classes.contents}>
-        <Link {...accountLinkProps} role='presentation' tabIndex={-1}>
+        <AccountLink {...accountLinkProps} role='presentation' tabIndex={-1}>
           <Avatar account={account} />
-        </Link>
+        </AccountLink>
         <FormattedMessage
           id='status.reblogged_by'
           defaultMessage='{name} boosted'
           values={{
             name: (
-              <Link {...accountLinkProps} className={classes.account}>
+              <AccountLink {...accountLinkProps} className={classes.account}>
                 <DisplayName variant='simple' account={account} />
-              </Link>
+              </AccountLink>
             ),
           }}
         />

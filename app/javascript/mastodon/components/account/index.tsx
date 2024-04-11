@@ -3,7 +3,6 @@ import { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 import { DotsThreeIcon } from '@phosphor-icons/react';
 
@@ -26,6 +25,7 @@ import { VerifiedBadge } from 'mastodon/components/badge';
 import { FollowersCounter } from 'mastodon/components/counters';
 import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
+import { AccountLink } from 'mastodon/components/link';
 import { RelativeTimestamp } from 'mastodon/components/relative_timestamp';
 import { ShortNumber } from 'mastodon/components/short_number';
 import { Skeleton } from 'mastodon/components/skeleton';
@@ -317,12 +317,12 @@ export const Account: React.FC<AccountProps> = ({
         })}
       >
         <div className='account__info-wrapper'>
-          <Link
+          <AccountLink
             className='account__display-name focusable'
-            title={account?.acct}
-            to={{ pathname: `/@${account?.acct}`, state: { reference } }}
-            data-hover-card-account={id}
-            data-hover-card-reference={reference}
+            account={account}
+            reference={reference}
+            setTitle
+            setHoverCard
           >
             <div className='account__avatar-wrapper'>
               {account ? (
@@ -351,7 +351,7 @@ export const Account: React.FC<AccountProps> = ({
                 </div>
               )}
             </div>
-          </Link>
+          </AccountLink>
 
           {account &&
             withBio &&

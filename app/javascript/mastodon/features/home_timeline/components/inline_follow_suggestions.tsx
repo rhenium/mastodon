@@ -2,8 +2,6 @@ import { useEffect, useCallback, useId } from 'react';
 
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import {
   CaretLeftIcon,
   CaretRightIcon,
@@ -23,6 +21,7 @@ import { Avatar } from 'mastodon/components/avatar';
 import { Badge, VerifiedBadge } from 'mastodon/components/badge';
 import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
+import { AccountLink } from 'mastodon/components/link';
 import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { domain } from 'mastodon/initial_state';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
@@ -147,29 +146,23 @@ const Card: React.FC<{
       </IconButton>
 
       <div className='inline-follow-suggestions__body__scrollable__card__avatar'>
-        <Link
-          to={{
-            pathname: `/@${account?.acct}`,
-            state: { reference: 'inline_suggestions' },
-          }}
-          data-hover-card-account={account?.id}
-          data-hover-card-reference='inline_suggestions'
+        <AccountLink
+          account={account}
+          reference='inline_suggestions'
+          setHoverCard
         >
           <Avatar account={account} size={70} />
-        </Link>
+        </AccountLink>
       </div>
 
       <div className='inline-follow-suggestions__body__scrollable__card__text-stack'>
-        <Link
-          to={{
-            pathname: `/@${account?.acct}`,
-            state: { reference: 'inline_suggestions' },
-          }}
-          data-hover-card-account={account?.id}
-          data-hover-card-reference='inline_suggestions'
+        <AccountLink
+          account={account}
+          reference='inline_suggestions'
+          setHoverCard
         >
           <DisplayName account={account} />
-        </Link>
+        </AccountLink>
         {firstVerifiedField ? (
           <VerifiedBadge link={firstVerifiedField.value} />
         ) : (

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { mergeProps } from '@react-aria/utils';
 
 import type { ApiMentionJSON } from '@/mastodon/api_types/statuses';
+import { AccountLink } from '@/mastodon/components/link';
 import { getCollectionPath } from '@/mastodon/features/collections/utils';
 import { isRedesignEnabled } from '@/mastodon/utils/environment';
 import type { OnElementHandler } from '@/mastodon/utils/html';
@@ -22,7 +23,7 @@ export interface HandledLinkProps {
   text: string;
   prevText?: string;
   hashtagAccountId?: string;
-  mention?: Pick<ApiMentionJSON, 'id' | 'acct'>;
+  mention?: Pick<ApiMentionJSON, 'id' | 'acct' | 'url'>;
   collectionId?: string;
 }
 
@@ -73,15 +74,15 @@ export const HandledLink: FC<HandledLinkProps & ComponentProps<'a'>> = ({
   } else if (mention) {
     // Handle mentions
     return (
-      <Link
+      <AccountLink
         className={classNames('mention', className)}
-        to={{ pathname: `/@${mention.acct}`, state: { reference: 'status' } }}
-        title={`@${mention.acct}`}
-        data-hover-card-account={mention.id}
-        data-hover-card-reference='status'
+        account={mention}
+        reference='status'
+        setHoverCard
+        setTitle
       >
         {children}
-      </Link>
+      </AccountLink>
     );
   } else if (collectionId) {
     return (

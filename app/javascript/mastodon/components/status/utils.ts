@@ -1,3 +1,4 @@
+import type { AccountLink } from '@/mastodon/components/link';
 import type { AccountShape } from '@/mastodon/models/account';
 import type { AccountStatusShape } from '@/mastodon/models/status';
 
@@ -9,16 +10,12 @@ export function statusLink({
 }
 
 export function accountStatusLinkProps(
-  account: Pick<AccountShape, 'acct' | 'id'>,
+  account: Pick<AccountShape, 'acct' | 'id' | 'url'>,
 ) {
   return {
-    to: {
-      pathname: `/@${account.acct}`,
-      state: { reference: 'status' },
-    },
-    title: `@${account.acct}`,
+    account: account,
+    reference: 'status',
+    setHoverCard: true,
     'data-id': account.id,
-    'data-hover-card-account': account.id,
-    'data-hover-card-reference': 'status',
-  };
+  } satisfies Partial<React.ComponentProps<typeof AccountLink>>;
 }

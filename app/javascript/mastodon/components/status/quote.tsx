@@ -42,6 +42,7 @@ import { DisplayName } from '../display_name';
 import { DisplayNameSimple } from '../display_name/simple';
 import { EmojiHTML } from '../emoji/html';
 import { Icon } from '../icon';
+import { AccountLink, StatusLink } from '../link';
 import { PopoverMenuCard } from '../menu/card';
 import { RelativeTimestamp } from '../relative_timestamp';
 import { Skeleton } from '../skeleton';
@@ -119,8 +120,6 @@ export const QuotedStatus: React.FC<{
     return null;
   }
 
-  const statusTo = `/@${status.account.acct}/${status.id}`;
-
   return (
     <Card
       onDelete={onDelete}
@@ -132,35 +131,35 @@ export const QuotedStatus: React.FC<{
         className={classes.title}
         image={
           !disableOpen ? (
-            <Link
+            <AccountLink
               {...accountStatusLinkProps(status.account)}
               role='presentation'
               tabIndex={-1}
               className={classes.accountLink}
             >
               <Avatar account={status.account} />
-            </Link>
+            </AccountLink>
           ) : (
             <Avatar account={status.account} />
           )
         }
         afterContent={
           !disableOpen ? (
-            <Link to={statusTo}>
+            <StatusLink status={status} account={status.account}>
               <RelativeTimestamp timestamp={status.created_at} />
-            </Link>
+            </StatusLink>
           ) : (
             <RelativeTimestamp timestamp={status.created_at} />
           )
         }
       >
         {!disableOpen ? (
-          <Link
+          <AccountLink
             {...accountStatusLinkProps(status.account)}
             className={classes.accountLink}
           >
             <DisplayName account={status.account} variant='noDomain' />
-          </Link>
+          </AccountLink>
         ) : (
           <DisplayName account={status.account} variant='noDomain' />
         )}
@@ -356,8 +355,9 @@ const QuotedStatusLink: React.FC<{ status: AccountStatusShape }> = ({
 
   if (quotedPost) {
     link = (
-      <Link
-        to={`/@${quotedPost.account.acct}/${quotedPost.id}`}
+      <StatusLink
+        status={quotedPost}
+        account={quotedPost.account}
         className={classes.nestedQuote}
       >
         <Avatar account={quotedPost.account} />
@@ -371,7 +371,7 @@ const QuotedStatusLink: React.FC<{ status: AccountStatusShape }> = ({
         />
         &bull;
         <RelativeTimestamp timestamp={quotedPost.created_at} />
-      </Link>
+      </StatusLink>
     );
   }
 

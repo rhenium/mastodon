@@ -26,6 +26,7 @@ import { DisplayName } from 'mastodon/components/display_name';
 import { EditedTimestamp } from 'mastodon/components/edited_timestamp';
 import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
 import { Icon } from 'mastodon/components/icon';
+import { AccountLink } from 'mastodon/components/link';
 import { IconLogo } from 'mastodon/components/logo';
 import MediaGallery from 'mastodon/components/media_gallery';
 import { VisibilityIcon } from 'mastodon/components/visibility_icon';
@@ -456,13 +457,10 @@ export const DetailedStatus: React.FC<{
             />
           </div>
         )}
-        <Link
-          to={{
-            pathname: `/@${status.getIn(['account', 'acct'])}`,
-            state: { reference: 'status' },
-          }}
-          data-hover-card-account={status.getIn(['account', 'id'])}
-          data-hover-card-reference='status'
+        <AccountLink
+          account={status.get('account')}
+          reference='status'
+          setHoverCard
           className='detailed-status__display-name'
         >
           <div className='detailed-status__display-avatar'>
@@ -479,7 +477,7 @@ export const DetailedStatus: React.FC<{
               <IconLogo />
             </>
           )}
-        </Link>
+        </AccountLink>
 
         {matchedFilters && (
           <FilterWarning
@@ -522,7 +520,7 @@ export const DetailedStatus: React.FC<{
           <div className='detailed-status__meta__line'>
             <a
               className='detailed-status__datetime'
-              href={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}
+              href={status.get('url')}
               target='_blank'
               rel='noopener noreferrer'
             >

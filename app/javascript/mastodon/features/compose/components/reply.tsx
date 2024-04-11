@@ -1,11 +1,9 @@
-import { Link } from 'react-router-dom';
-
 import { Avatar } from '@/mastodon/components/avatar';
 import { LinkedDisplayName } from '@/mastodon/components/display_name';
 import { EmojiHTML } from '@/mastodon/components/emoji/html';
+import { StatusLink } from '@/mastodon/components/link';
 import { RelativeTimestamp } from '@/mastodon/components/relative_timestamp';
 import { onStatusLinksDisabled } from '@/mastodon/components/status/hooks';
-import { statusLink } from '@/mastodon/components/status/utils';
 import { selectAccountStatus } from '@/mastodon/selectors/statuses';
 import { useAppSelector } from '@/mastodon/store';
 
@@ -36,13 +34,17 @@ export const ComposeReply: React.FC = () => {
 
         <span className={classes.replyTime}>
           &nbsp;&bull;&nbsp;
-          <Link to={statusLink(status)}>
+          <StatusLink status={status} account={status.account}>
             <RelativeTimestamp timestamp={status.created_at} />
-          </Link>
+          </StatusLink>
         </span>
       </figcaption>
 
-      <Link to={statusLink(status)} className={classes.replyText}>
+      <StatusLink
+        status={status}
+        account={status.account}
+        className={classes.replyText}
+      >
         <EmojiHTML
           as='blockquote'
           cite={status.uri}
@@ -51,7 +53,7 @@ export const ComposeReply: React.FC = () => {
           lang={status.translation?.language ?? status.language}
           onElement={onStatusLinksDisabled}
         />
-      </Link>
+      </StatusLink>
     </figure>
   );
 };

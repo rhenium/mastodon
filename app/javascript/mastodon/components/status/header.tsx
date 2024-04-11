@@ -3,7 +3,6 @@ import { useId } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 import IconPinned from '@/images/icons/icon_pinned.svg?react';
 import { useAccount } from '@/mastodon/hooks/useAccount';
@@ -15,16 +14,17 @@ import { Badge } from '../badge';
 import { DisplayName } from '../display_name';
 import { useAccountHandle } from '../display_name/default';
 import { Icon } from '../icon';
+import { AccountLink, StatusLink } from '../link';
 import { RelativeTimestamp } from '../relative_timestamp';
 import { Skeleton } from '../skeleton';
 
 import classes from './header.module.scss';
-import { accountStatusLinkProps, statusLink } from './utils';
+import { accountStatusLinkProps } from './utils';
 
 interface StatusRedesignHeaderProps {
   status: Pick<
     AccountStatusShape,
-    'id' | 'account' | 'created_at' | 'visibility' | 'mentions'
+    'id' | 'account' | 'created_at' | 'visibility' | 'mentions' | 'url'
   >;
   className?: string;
   featured?: boolean;
@@ -46,13 +46,13 @@ export const StatusRedesignHeader: React.FC<StatusRedesignHeaderProps> = ({
   const accountLinkProps = accountStatusLinkProps(account);
 
   let displayName = (
-    <Link
+    <AccountLink
       {...accountLinkProps}
       className={classes.nameLink}
       aria-describedby={handleId}
     >
       <DisplayName account={account} variant='noDomain' />
-    </Link>
+    </AccountLink>
   );
   if (status.visibility === 'private') {
     displayName = (
@@ -97,39 +97,38 @@ export const StatusRedesignHeader: React.FC<StatusRedesignHeaderProps> = ({
 
   return (
     <header className={classNames(className, classes.root)}>
-      <Link
+      <AccountLink
         {...accountLinkProps}
         role='presentation'
         tabIndex={-1}
         className={classes.avatar}
       >
         <Avatar account={account} size={null} />
-      </Link>
+      </AccountLink>
 
       <div className={classes.contents}>
         <p className={classes.name}>
           {displayName}
           &bull;
-          <Link
-            to={{
-              pathname: statusLink(status),
-              state: { reference: 'status' },
-            }}
+          <StatusLink
+            status={status}
+            account={account}
+            reference='status'
             className={classes.date}
           >
             <RelativeTimestamp timestamp={status.created_at} />
-          </Link>
+          </StatusLink>
         </p>
 
         <p className={classes.handle}>
-          <Link
+          <AccountLink
             {...accountLinkProps}
             role='presentation'
             tabIndex={-1}
             id={handleId}
           >
             {handle ?? <Skeleton width='7ch' />}
-          </Link>
+          </AccountLink>
         </p>
       </div>
 

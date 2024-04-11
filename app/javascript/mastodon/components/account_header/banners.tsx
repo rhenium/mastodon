@@ -3,8 +3,6 @@ import type { FC, ReactElement, ReactNode } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import { CheckIcon, XIcon } from '@phosphor-icons/react';
 
 import {
@@ -14,6 +12,7 @@ import {
 import { AvatarOverlay } from '@/mastodon/components/avatar_overlay';
 import { Button } from '@/mastodon/components/button/redesign';
 import { DisplayName } from '@/mastodon/components/display_name';
+import { AccountLink } from '@/mastodon/components/link';
 import { useAccountVisibility } from '@/mastodon/hooks/useAccountVisibility';
 import { useRelationship } from '@/mastodon/hooks/useRelationship';
 import type { Account } from '@/mastodon/models/account';
@@ -115,17 +114,17 @@ const MovedNote: React.FC<{
       </MessageText>
 
       <div className={classes.bannerActions}>
-        <Link to={`/@${to?.acct}`} className={classes.bannerActionsDisplayName}>
+        <AccountLink account={to} className={classes.bannerActionsDisplayName}>
           <AvatarOverlay account={to} friend={from} />
           <DisplayName account={to} />
-        </Link>
+        </AccountLink>
 
-        <Link to={`/@${to?.acct}`} className='button'>
+        <AccountLink account={to} className='button'>
           <FormattedMessage
             id='account.go_to_profile'
             defaultMessage='Go to profile'
           />
-        </Link>
+        </AccountLink>
       </div>
     </>
   );
