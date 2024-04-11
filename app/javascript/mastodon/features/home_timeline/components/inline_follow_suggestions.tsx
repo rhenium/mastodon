@@ -21,6 +21,7 @@ import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
 import { Icon } from 'mastodon/components/icon';
 import { IconButton } from 'mastodon/components/icon_button';
+import { AccountLink } from 'mastodon/components/link';
 import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { domain } from 'mastodon/initial_state';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
@@ -142,29 +143,23 @@ const Card: React.FC<{
       />
 
       <div className='inline-follow-suggestions__body__scrollable__card__avatar'>
-        <Link
-          to={{
-            pathname: `/@${account?.acct}`,
-            state: { reference: 'inline_suggestions' },
-          }}
-          data-hover-card-account={account?.id}
-          data-hover-card-reference='inline_suggestions'
+        <AccountLink
+          account={account}
+          reference='inline_suggestions'
+          setHoverCard
         >
           <Avatar account={account} size={72} />
-        </Link>
+        </AccountLink>
       </div>
 
       <div className='inline-follow-suggestions__body__scrollable__card__text-stack'>
-        <Link
-          to={{
-            pathname: `/@${account?.acct}`,
-            state: { reference: 'inline_suggestions' },
-          }}
-          data-hover-card-account={account?.id}
-          data-hover-card-reference='inline_suggestions'
+        <AccountLink
+          account={account}
+          reference='inline_suggestions'
+          setHoverCard
         >
           <DisplayName account={account} />
-        </Link>
+        </AccountLink>
         {firstVerifiedField ? (
           <VerifiedBadge link={firstVerifiedField.value} />
         ) : (

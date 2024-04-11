@@ -21,9 +21,17 @@ const meta = {
   render({ mentionAccount, hashtagAccount, ...args }) {
     let mention: HandledLinkProps['mention'] | undefined;
     if (mentionAccount === 'local') {
-      mention = { id: '1', acct: 'testuser' };
+      mention = {
+        id: '1',
+        acct: 'testuser',
+        url: 'https://example.com/@testuser',
+      };
     } else if (mentionAccount === 'remote') {
-      mention = { id: '2', acct: 'remoteuser@mastodon.social' };
+      mention = {
+        id: '2',
+        acct: 'remoteuser@mastodon.social',
+        url: 'https://mastodon.social.example/@remoteuser',
+      };
     }
     return (
       <>

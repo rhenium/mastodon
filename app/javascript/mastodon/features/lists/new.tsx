@@ -102,6 +102,10 @@ const MembersLink: React.FC<{
       });
   }, [id]);
 
+  const avatarAccountsZ = avatarAccounts.map((a) => ({
+    ...a,
+    url: a.url ?? '',
+  }));
   return (
     <Link to={`/lists/${id}/members`} className='app-form__link'>
       <div className='app-form__link__text'>
@@ -117,7 +121,7 @@ const MembersLink: React.FC<{
       </div>
 
       <AvatarGroup compact>
-        {avatarAccounts.map((a) => (
+        {avatarAccountsZ.map((a) => (
           <Avatar key={a.id} account={a} size={30} />
         ))}
       </AvatarGroup>

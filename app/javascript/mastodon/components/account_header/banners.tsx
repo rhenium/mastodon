@@ -3,8 +3,6 @@ import type { FC, ReactElement, ReactNode } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import {
   authorizeFollowRequest,
   rejectFollowRequest,
@@ -20,6 +18,7 @@ import { AvatarOverlay } from '../avatar_overlay';
 import { Button } from '../button';
 import { DisplayName } from '../display_name';
 import { Icon } from '../icon';
+import { AccountLink } from '../link';
 
 import classes from './styles.module.scss';
 
@@ -119,17 +118,17 @@ const MovedNote: React.FC<{
       </MessageText>
 
       <div className={classes.bannerActions}>
-        <Link to={`/@${to?.acct}`} className={classes.bannerActionsDisplayName}>
+        <AccountLink account={to} className={classes.bannerActionsDisplayName}>
           <AvatarOverlay account={to} friend={from} />
           <DisplayName account={to} />
-        </Link>
+        </AccountLink>
 
-        <Link to={`/@${to?.acct}`} className='button'>
+        <AccountLink account={to} className='button'>
           <FormattedMessage
             id='account.go_to_profile'
             defaultMessage='Go to profile'
           />
-        </Link>
+        </AccountLink>
       </div>
     </>
   );

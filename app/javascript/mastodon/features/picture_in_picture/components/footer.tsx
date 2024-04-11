@@ -190,7 +190,7 @@ export const Footer: React.FC<{
           icon='external-link'
           iconComponent={OpenInNewIcon}
           onClick={handleOpenClick}
-          href={`/@${account?.acct}/${status.get('id') as string}`}
+          href={status.get('url') as string}
         />
       )}
     </div>
