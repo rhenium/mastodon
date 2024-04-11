@@ -22,6 +22,7 @@ import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
 import type { StatusLike } from 'mastodon/components/hashtag_bar';
 import { getHashtagBarForStatus } from 'mastodon/components/hashtag_bar';
 import { Icon } from 'mastodon/components/icon';
+import { AccountLink } from 'mastodon/components/link';
 import { IconLogo } from 'mastodon/components/logo';
 import MediaGallery from 'mastodon/components/media_gallery';
 import { PictureInPicturePlaceholder } from 'mastodon/components/picture_in_picture_placeholder';
@@ -440,9 +441,9 @@ export const DetailedStatus: React.FC<{
             />
           </div>
         )}
-        <Link
-          to={`/@${status.getIn(['account', 'acct'])}`}
-          data-hover-card-account={status.getIn(['account', 'id'])}
+        <AccountLink
+          account={status.get('account')}
+          setHoverCard
           className='detailed-status__display-name'
         >
           <div className='detailed-status__display-avatar'>
@@ -459,7 +460,7 @@ export const DetailedStatus: React.FC<{
               <IconLogo />
             </>
           )}
-        </Link>
+        </AccountLink>
 
         {matchedFilters && (
           <FilterWarning
@@ -502,7 +503,7 @@ export const DetailedStatus: React.FC<{
           <div className='detailed-status__meta__line'>
             <a
               className='detailed-status__datetime'
-              href={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}
+              href={status.get('url')}
               target='_blank'
               rel='noopener noreferrer'
             >

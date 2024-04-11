@@ -3,7 +3,6 @@ import type { FC, HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { defineMessage, useIntl } from 'react-intl';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 import type { Account, AccountShapeFull } from '@/mastodon/models/account';
 import { selectAccountStatus } from '@/mastodon/selectors/statuses';
@@ -13,6 +12,7 @@ import { Avatar } from '../avatar';
 import { AvatarOverlay } from '../avatar_overlay';
 import type { DisplayNameProps } from '../display_name';
 import { LinkedDisplayName } from '../display_name';
+import { StatusLink } from '../link';
 import { RelativeTimestamp } from '../relative_timestamp';
 import { VisibilityIcon } from '../visibility_icon';
 
@@ -67,8 +67,9 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
 
       {contentBeforeDate}
 
-      <Link
-        to={`/@${statusAccount.acct}/${status.id}`}
+      <StatusLink
+        status={status}
+        account={statusAccount}
         className='status__relative-time'
       >
         <span className='status__visibility-icon'>
@@ -76,7 +77,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
         </span>
         <RelativeTimestamp timestamp={status.created_at} />
         {editedAt && <StatusEditedAt editedAt={editedAt} />}
-      </Link>
+      </StatusLink>
 
       {contentAfterDate}
     </div>

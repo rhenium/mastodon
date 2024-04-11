@@ -21,6 +21,7 @@ import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
 import { Icon } from 'mastodon/components/icon';
 import { IconButton } from 'mastodon/components/icon_button';
+import { AccountLink } from 'mastodon/components/link';
 import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { domain } from 'mastodon/initial_state';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
@@ -142,15 +143,15 @@ const Card: React.FC<{
       />
 
       <div className='inline-follow-suggestions__body__scrollable__card__avatar'>
-        <Link to={`/@${account?.acct}`} data-hover-card-account={account?.id}>
+        <AccountLink account={account} setHoverCard>
           <Avatar account={account} size={72} />
-        </Link>
+        </AccountLink>
       </div>
 
       <div className='inline-follow-suggestions__body__scrollable__card__text-stack'>
-        <Link to={`/@${account?.acct}`} data-hover-card-account={account?.id}>
+        <AccountLink account={account} setHoverCard>
           <DisplayName account={account} />
-        </Link>
+        </AccountLink>
         {firstVerifiedField ? (
           <VerifiedBadge link={firstVerifiedField.value} />
         ) : (

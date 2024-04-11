@@ -2,8 +2,6 @@ import { useCallback } from 'react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import BarChart4BarsIcon from '@/material-icons/400-24px/bar_chart_4_bars.svg?react';
@@ -12,6 +10,7 @@ import PhotoLibraryIcon from '@/material-icons/400-24px/photo_library.svg?react'
 import { cancelReplyCompose } from 'mastodon/actions/compose';
 import { Icon } from 'mastodon/components/icon';
 import { IconButton } from 'mastodon/components/icon_button';
+import { AccountLink, StatusLink } from 'mastodon/components/link';
 import { RelativeTimestamp } from 'mastodon/components/relative_timestamp';
 import { EmbeddedStatusContent } from 'mastodon/features/notifications_v2/components/embedded_status_content';
 
@@ -38,9 +37,9 @@ export const EditIndicator = () => {
     <div className='edit-indicator'>
       <div className='edit-indicator__header'>
         <div className='edit-indicator__display-name'>
-          <Link to={`/@${account.get('acct')}`}>@{account.get('acct')}</Link>
+          <AccountLink account={account}>@{account.get('acct')}</AccountLink>
           ·
-          <Link to={`/@${account.get('acct')}/${status.get('id')}`}><RelativeTimestamp timestamp={status.get('created_at')} /></Link>
+          <StatusLink status={status} account={account}><RelativeTimestamp timestamp={status.get('created_at')} /></StatusLink>
         </div>
 
         <div className='edit-indicator__cancel'>

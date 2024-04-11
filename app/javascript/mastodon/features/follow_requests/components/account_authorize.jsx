@@ -2,13 +2,12 @@ import PropTypes from 'prop-types';
 
 import { defineMessages } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 import CheckIcon from '@/material-icons/400-24px/check.svg?react';
 import CloseIcon from '@/material-icons/400-24px/close.svg?react';
+import { AccountLink } from 'mastodon/components/link';
 
 import { AccountBio } from '@/mastodon/components/account_bio';
 import { Avatar } from '@/mastodon/components/avatar';
@@ -36,10 +35,10 @@ class AccountAuthorize extends ImmutablePureComponent {
     return (
       <div className='account-authorize__wrapper'>
         <div className='account-authorize'>
-          <Link to={`/@${account.get('acct')}`} className='detailed-status__display-name'>
+          <AccountLink account={account} className='detailed-status__display-name'>
             <div className='account-authorize__avatar'><Avatar account={account} size={48} /></div>
             <DisplayName account={account} />
-          </Link>
+          </AccountLink>
 
           <AccountBio accountId={account.id} />
         </div>

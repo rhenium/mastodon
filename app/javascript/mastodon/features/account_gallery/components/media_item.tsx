@@ -78,7 +78,7 @@ export const MediaItem: React.FC<{
   const avatarUrl = account?.avatar_static;
   const lang = status.get('language') as string;
   const blurhash = attachment.get('blurhash') as string;
-  const statusId = status.get('id') as string;
+  const statusUrl = status.get('url') as string;
   const type = attachment.get('type') as string;
 
   let thumbnail;
@@ -195,7 +195,7 @@ export const MediaItem: React.FC<{
 
       <a
         className='media-gallery__item-thumbnail'
-        href={`/@${account?.acct}/${statusId}`}
+        href={statusUrl}
         onClick={handleClick}
         target='_blank'
         rel='noopener noreferrer'

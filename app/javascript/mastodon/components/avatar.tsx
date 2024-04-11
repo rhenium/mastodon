@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
+import { AccountLink } from 'mastodon/components/link';
 import { useHovering } from 'mastodon/hooks/useHovering';
 import { autoPlayGif } from 'mastodon/initial_state';
 import type { Account, AccountShapeFull } from 'mastodon/models/account';
@@ -12,7 +12,7 @@ import { useAccount } from '../hooks/useAccount';
 interface Props {
   account?: Pick<
     Account | AccountShapeFull,
-    'id' | 'acct' | 'avatar' | 'avatar_static'
+    'id' | 'acct' | 'avatar' | 'avatar_static' | 'url'
   >;
   alt?: string;
   size?: number;
@@ -84,13 +84,9 @@ export const Avatar: React.FC<Props> = ({
 
   if (withLink) {
     return (
-      <Link
-        to={`/@${account?.acct}`}
-        title={`@${account?.acct}`}
-        data-hover-card-account={account?.id}
-      >
+      <AccountLink account={account} setTitle setHoverCard>
         {avatar}
-      </Link>
+      </AccountLink>
     );
   }
 
