@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 
 import type { LinkProps } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
+import { AccountLink } from '@/mastodon/components/link';
 import type { Account, AccountShapeFull } from '@/mastodon/models/account';
 
 import { DisplayNameDefault } from './default';
@@ -37,15 +37,9 @@ export const LinkedDisplayName: FC<
   }
 
   return (
-    <Link
-      to={`/@${account.acct}`}
-      title={`@${account.acct}`}
-      data-id={account.id}
-      data-hover-card-account={account.id}
-      {...linkProps}
-    >
+    <AccountLink account={account} setTitle setHoverCard {...linkProps}>
       {children}
       <DisplayName {...displayProps} />
-    </Link>
+    </AccountLink>
   );
 };

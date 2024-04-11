@@ -1,7 +1,5 @@
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import { useSelector } from 'react-redux';
 
 import BarChart4BarsIcon from '@/material-icons/400-24px/bar_chart_4_bars.svg?react';
@@ -9,6 +7,7 @@ import PhotoLibraryIcon from '@/material-icons/400-24px/photo_library.svg?react'
 import { Avatar } from 'mastodon/components/avatar';
 import { DisplayName } from 'mastodon/components/display_name';
 import { Icon } from 'mastodon/components/icon';
+import { AccountLink } from 'mastodon/components/link';
 import { EmbeddedStatusContent } from 'mastodon/features/notifications_v2/components/embedded_status_content';
 
 export const ReplyIndicator = () => {
@@ -24,14 +23,14 @@ export const ReplyIndicator = () => {
     <div className='reply-indicator'>
       <div className='reply-indicator__line' />
 
-      <Link to={`/@${account.get('acct')}`} className='detailed-status__display-avatar'>
+      <AccountLink account={account} className='detailed-status__display-avatar'>
         <Avatar key={`avatar-${account.get('id')}`} account={account} size={46} />
-      </Link>
+      </AccountLink>
 
       <div className='reply-indicator__main'>
-        <Link to={`/@${account.get('acct')}`} className='detailed-status__display-name'>
+        <AccountLink account={account} className='detailed-status__display-name'>
           <DisplayName account={account} />
-        </Link>
+        </AccountLink>
 
         <EmbeddedStatusContent
           className='reply-indicator__content translate'

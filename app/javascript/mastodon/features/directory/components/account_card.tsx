@@ -1,11 +1,10 @@
 import { FormattedMessage } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import { EmojiHTML } from '@/mastodon/components/emoji/html';
 import { Avatar } from 'mastodon/components/avatar';
 import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
+import { AccountLink } from 'mastodon/components/link';
 import { ShortNumber } from 'mastodon/components/short_number';
 import { autoPlayGif } from 'mastodon/initial_state';
 import type { Account } from 'mastodon/models/account';
@@ -21,7 +20,10 @@ export const AccountCard: React.FC<{ accountId: string }> = ({ accountId }) => {
 
   return (
     <div className='account-card'>
-      <Link to={`/@${account.get('acct')}`} className='account-card__permalink'>
+      <AccountLink
+        account={account as Account}
+        className='account-card__permalink'
+      >
         <div className='account-card__header'>
           <img
             src={
@@ -37,7 +39,7 @@ export const AccountCard: React.FC<{ accountId: string }> = ({ accountId }) => {
           </div>
           <DisplayName account={account as Account} />
         </div>
-      </Link>
+      </AccountLink>
 
       {account.get('note').length > 0 && (
         <EmojiHTML
