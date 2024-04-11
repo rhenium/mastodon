@@ -2,14 +2,13 @@ import { useCallback } from 'react';
 
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-
 import CloseIcon from '@/material-icons/400-24px/close.svg?react';
 import { dismissSuggestion } from 'mastodon/actions/suggestions';
 import { Avatar } from 'mastodon/components/avatar';
 import { DisplayName } from 'mastodon/components/display_name';
 import { FollowButton } from 'mastodon/components/follow_button';
 import { IconButton } from 'mastodon/components/icon_button';
+import { AccountLink } from 'mastodon/components/link';
 import { domain } from 'mastodon/initial_state';
 import { useAppDispatch, useAppSelector } from 'mastodon/store';
 
@@ -96,13 +95,10 @@ export const Card: React.FC<{ id: string; source: SuggestionSource }> = ({
       <div className='explore-suggestions-card__source'>{label}</div>
 
       <div className='explore-suggestions-card__body'>
-        <Link
-          to={{
-            pathname: `/@${account.get('acct')}`,
-            state: { reference: 'suggestions' },
-          }}
-          data-hover-card-account={account.id}
-          data-hover-card-reference='suggestions'
+        <AccountLink
+          account={account}
+          reference='suggestions'
+          setHoverCard
           className='explore-suggestions-card__link'
         >
           <Avatar
@@ -111,7 +107,7 @@ export const Card: React.FC<{ id: string; source: SuggestionSource }> = ({
             className='explore-suggestions-card__avatar'
           />
           <DisplayName account={account} />
-        </Link>
+        </AccountLink>
         <div className='explore-suggestions-card__actions'>
           <IconButton
             icon='close'

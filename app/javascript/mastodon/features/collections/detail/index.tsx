@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useHistory, useLocation, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import {
   QuestionIcon,
@@ -25,6 +24,7 @@ import { Callout } from 'mastodon/components/callout';
 import { DisplayName } from 'mastodon/components/display_name';
 import { useAccountHandle } from 'mastodon/components/display_name/default';
 import { FormattedDateWrapper } from 'mastodon/components/formatted_date';
+import { AccountLink } from 'mastodon/components/link';
 import { LoadingIndicator } from 'mastodon/components/loading_indicator';
 import { Scrollable } from 'mastodon/components/scrollable_list/components';
 import { useAccount } from 'mastodon/hooks/useAccount';
@@ -58,9 +58,9 @@ export const AuthorNote: React.FC<{ id: string }> = ({ id }) => {
   }
 
   const author = (
-    <Link to={`/@${account.acct}`} data-hover-card-account={account.id}>
+    <AccountLink account={account} setHoverCard>
       {authorHandle}
-    </Link>
+    </AccountLink>
   );
 
   return (

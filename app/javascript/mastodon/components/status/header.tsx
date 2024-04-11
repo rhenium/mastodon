@@ -3,7 +3,6 @@ import { useId } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 import { PushPinIcon } from '@phosphor-icons/react';
 
@@ -16,16 +15,17 @@ import { Badge } from '../badge';
 import { DisplayName } from '../display_name';
 import { useAccountHandle } from '../display_name/default';
 import { Icon } from '../icon';
+import { AccountLink, StatusLink } from '../link';
 import { RelativeTimestamp } from '../relative_timestamp';
 import { Skeleton } from '../skeleton';
 
 import classes from './header.module.scss';
-import { accountStatusLinkProps, statusLink } from './utils';
+import { accountStatusLinkProps } from './utils';
 
 interface StatusHeaderProps {
   status: Pick<
     AccountStatusShape,
-    'id' | 'account' | 'created_at' | 'visibility' | 'mentions'
+    'id' | 'account' | 'created_at' | 'visibility' | 'mentions' | 'url'
   >;
   className?: string;
   featured?: boolean;
@@ -44,20 +44,20 @@ export const StatusHeader: React.FC<StatusHeaderProps> = ({
 
   return (
     <header className={classNames(className, classes.root)}>
-      <Link
+      <AccountLink
         {...accountLinkProps}
         role='presentation'
         tabIndex={-1}
         className={classes.avatar}
       >
         <Avatar account={account} size={null} />
-      </Link>
+      </AccountLink>
 
       <div className={classes.accountWrapper}>
         <StatusHeaderAuthors status={status} handleId={handleId} />
 
         <p className={classes.handle}>
-          <Link
+          <AccountLink
             {...accountLinkProps}
             role='presentation'
             tabIndex={-1}
@@ -65,7 +65,7 @@ export const StatusHeader: React.FC<StatusHeaderProps> = ({
             data-main-account-link='true'
           >
             {handle ?? <Skeleton width='7ch' />}
-          </Link>
+          </AccountLink>
         </p>
       </div>
 
@@ -96,14 +96,14 @@ export const StatusHeaderAuthors: React.FC<
   const { account } = status;
 
   let displayName = (
-    <Link
+    <AccountLink
       {...accountStatusLinkProps(account)}
       className={classes.nameLink}
       aria-describedby={handleId}
       data-main-account-link='true'
     >
       <DisplayName account={account} variant='noDomain' />
-    </Link>
+    </AccountLink>
   );
   if (status.visibility === 'private') {
     displayName = (
@@ -123,12 +123,12 @@ export const StatusHeaderAuthors: React.FC<
           description='DisplayName is the author, count is # of other people mentioned in the post'
           values={{
             name: (
-              <Link
+              <AccountLink
                 {...accountStatusLinkProps(firstMentionAccount)}
                 className={classes.nameLink}
               >
                 <DisplayName account={firstMentionAccount} variant='simple' />
-              </Link>
+              </AccountLink>
             ),
             // Minus two, as we're removing the current user as well.
             count: Math.max(status.mentions.length - 2, 0),
@@ -152,15 +152,14 @@ export const StatusHeaderAuthors: React.FC<
       {displayName}
       {/* Wrap the bullet with a span to not have the whitespace collapse */}
       <span aria-hidden='true'>&bull;</span>
-      <Link
-        to={{
-          pathname: statusLink(status),
-          state: { reference: 'status' },
-        }}
+      <StatusLink
+        status={status}
+        account={account}
+        reference='status'
         className={classes.date}
       >
         <RelativeTimestamp timestamp={status.created_at} />
-      </Link>
+      </StatusLink>
     </p>
   );
 };

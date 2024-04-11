@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from 'react';
 
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Helmet } from '@unhead/react/helmet';
 
@@ -26,6 +26,7 @@ import { VerifiedBadge } from 'mastodon/components/badge';
 import { Button } from 'mastodon/components/button';
 import { FollowersCounter } from 'mastodon/components/counters';
 import { DisplayName } from 'mastodon/components/display_name';
+import { AccountLink } from 'mastodon/components/link';
 import ScrollableList from 'mastodon/components/scrollable_list';
 import { ShortNumber } from 'mastodon/components/short_number';
 import { useSearchAccounts } from 'mastodon/hooks/useSearchAccounts';
@@ -114,12 +115,12 @@ const AccountItem: React.FC<{
   return (
     <div className='account'>
       <div className='account__wrapper'>
-        <Link
+        <AccountLink
           key={account.id}
           className='account__display-name'
-          title={account.acct}
-          to={`/@${account.acct}`}
-          data-hover-card-account={account.id}
+          account={account}
+          setTitle
+          setHoverCard
         >
           <div className='account__avatar-wrapper'>
             <Avatar account={account} size={36} />
@@ -138,7 +139,7 @@ const AccountItem: React.FC<{
               )}
             </div>
           </div>
-        </Link>
+        </AccountLink>
 
         <div className='account__relationship'>
           <Button
