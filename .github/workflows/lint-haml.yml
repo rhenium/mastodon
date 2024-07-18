@@ -5,6 +5,7 @@ on:
     branches:
       - 'main'
       - 'stable-*'
+      - 'nnn*'
     paths:
       - '.github/workflows/lint-haml.yml'
       - '.haml-lint*.yml'
