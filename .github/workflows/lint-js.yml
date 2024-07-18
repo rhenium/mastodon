@@ -5,6 +5,7 @@ on:
     branches:
       - 'main'
       - 'stable-*'
+      - 'nnn*'
     paths:
       - 'package.json'
       - 'yarn.lock'
