@@ -11,6 +11,7 @@ import {
   unblockAccount,
   unmuteAccount,
   unpinAccount,
+  fetchRemoteOutbox,
 } from '@/mastodon/actions/accounts';
 import { removeAccountFromFollowers } from '@/mastodon/actions/accounts_typed';
 import { showAlert } from '@/mastodon/actions/alerts';
@@ -246,6 +247,10 @@ const messages = defineMessages({
     id: 'confirmations.remove_from_followers.confirm',
     defaultMessage: 'Remove follower',
   },
+  fetchRemoteOutbox: {
+    id: 'account.fetch_remote_outbox',
+    defaultMessage: 'Fetch remote outbox of @{name}',
+  },
 });
 
 function getMenuItems({
@@ -292,6 +297,14 @@ function getMenuItems({
             domain: remoteDomain,
           }),
       href: account.url,
+    });
+    items.push({
+      text: intl.formatMessage(messages.fetchRemoteOutbox, {
+        name: account.username,
+      }),
+      action: () => {
+        void dispatch(fetchRemoteOutbox({ accountId: account.id }));
+      },
     });
   }
 

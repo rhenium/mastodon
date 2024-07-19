@@ -46,6 +46,7 @@ const titleFromAccount = (account: Account) => {
 export const AccountHeader: React.FC<{
   accountId: string;
   hideTabs?: boolean;
+  onReloadContent?: unknown; // FIXME
 }> = ({ accountId, hideTabs }) => {
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.get(accountId));
