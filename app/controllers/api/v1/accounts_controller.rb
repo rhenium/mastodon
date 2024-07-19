@@ -82,6 +82,11 @@ class Api::V1::AccountsController < Api::BaseController
     render json: @account, serializer: REST::RelationshipSerializer, relationships: relationships
   end
 
+  def fetch_remote
+    ActivityPub::FetchRemoteOutboxService.new.call(@account)
+    render json: @account, serializer: REST::AccountSerializer
+  end
+
   private
 
   def set_account
