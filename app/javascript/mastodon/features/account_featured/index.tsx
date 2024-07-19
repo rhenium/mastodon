@@ -99,6 +99,10 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
 
   const isLoading = !accountId || collectionsLoadStatus !== 'idle';
 
+  const handleReloadContent = useCallback(() => {
+    // Do nothing
+  }, []);
+
   if (accountId === null) {
     return <BundleColumnError multiColumn={multiColumn} errorType='routing' />;
   }
@@ -133,7 +137,11 @@ const AccountFeatured: React.FC<{ multiColumn: boolean }> = ({
 
       <Scrollable>
         {accountId && (
-          <AccountHeader accountId={accountId} hideTabs={forceEmptyState} />
+          <AccountHeader
+            accountId={accountId}
+            hideTabs={forceEmptyState}
+            onReloadContent={handleReloadContent}
+          />
         )}
         {!featuredAccountIds.isEmpty() && (
           <>
@@ -215,11 +223,20 @@ const AccountFeaturedWrapper = ({
   children,
   accountId,
 }: React.PropsWithChildren<{ accountId?: string }>) => {
+  const handleReloadContent = useCallback(() => {
+    // Do nothing
+  }, []);
+
   return (
     <Column>
       <ColumnBackButton />
       <div className='scrollable scrollable--flex'>
-        {accountId && <AccountHeader accountId={accountId} />}
+        {accountId && (
+          <AccountHeader
+            accountId={accountId}
+            onReloadContent={handleReloadContent}
+          />
+        )}
         {children}
       </div>
     </Column>

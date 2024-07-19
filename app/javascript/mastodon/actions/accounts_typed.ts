@@ -4,11 +4,13 @@ import {
   apiRemoveAccountFromFollowers,
   apiGetEndorsedAccounts,
   apiGetAccounts,
+  apiFetchRemoteOutbox,
 } from 'mastodon/api/accounts';
+import type { ApiAccountJSON } from 'mastodon/api_types/accounts';
 import type { ApiRelationshipJSON } from 'mastodon/api_types/relationships';
 import { createDataLoadingThunk } from 'mastodon/store/typed_functions';
 
-import { importFetchedAccounts } from './importer';
+import { importFetchedAccount, importFetchedAccounts } from './importer';
 
 export const revealAccount = createAction<{
   id: string;
@@ -121,5 +123,22 @@ export const fetchAccounts = createDataLoadingThunk(
   (data, { dispatch }) => {
     dispatch(importFetchedAccounts(data));
     return data;
+  },
+);
+
+export const fetchRemoteOutboxSuccess = createAction<{
+  account: ApiAccountJSON;
+}>('accounts/fetchRemoteOutbox/SUCCESS');
+
+export const fetchRemoteOutbox = createDataLoadingThunk(
+  'accounts/fetchRemoteOutbox',
+  ({ accountId }: { accountId: string; callback?: () => void }) =>
+    apiFetchRemoteOutbox(accountId),
+  (data, { dispatch, actionArg }) => {
+    dispatch(importFetchedAccount(data));
+    dispatch(fetchRemoteOutboxSuccess({ account: data }));
+    // FIXME
+    actionArg.callback?.();
+    return { data };
   },
 );
