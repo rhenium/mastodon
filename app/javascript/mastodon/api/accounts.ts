@@ -65,6 +65,9 @@ export const apiGetTagSuggestions = () =>
 export const apiGetEndorsedAccounts = (id: string) =>
   apiRequestGet<ApiAccountJSON>(`v1/accounts/${id}/endorsements`);
 
+export const apiFetchRemoteOutbox = (id: string) =>
+  apiRequestPost<ApiAccountJSON>(`v1/accounts/${id}/fetch_remote`);
+
 export const apiGetFamiliarFollowers = (id: string) =>
   apiRequestGet<ApiFamiliarFollowersJSON>('v1/accounts/familiar_followers', {
     id,

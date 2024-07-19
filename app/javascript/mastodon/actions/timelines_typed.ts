@@ -15,18 +15,30 @@ import {
 } from './timelines';
 
 export const expandTimelineByKey = createAppThunk(
-  (args: { key: string; maxId?: number }, { dispatch }) => {
+  (args: { key: string; maxId?: number; __refresh?: true }, { dispatch }) => {
     const params = parseTimelineKey(args.key);
     if (!params) {
       return;
     }
 
-    void dispatch(expandTimelineByParams({ ...params, maxId: args.maxId }));
+    void dispatch(
+      expandTimelineByParams({
+        ...params,
+        maxId: args.maxId,
+        __refresh: args.__refresh,
+      }),
+    );
   },
 );
 
+export const reloadTimelineByKey = (args: { key: string }) =>
+  expandTimelineByKey({ ...args, __refresh: true });
+
 export const expandTimelineByParams = createAppThunk(
-  (params: TimelineParams & { maxId?: number }, { dispatch }) => {
+  (
+    params: TimelineParams & { maxId?: number; __refresh?: true },
+    { dispatch },
+  ) => {
     let url = '';
     const extra: Record<string, string | boolean> = {};
 
@@ -54,6 +66,9 @@ export const expandTimelineByParams = createAppThunk(
 
     if (params.maxId) {
       extra.max_id = params.maxId.toString();
+    }
+    if (params.__refresh) {
+      extra.__refresh = true;
     }
 
     return dispatch(expandTimeline(timelineKey(params), url, extra));

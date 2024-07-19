@@ -44,6 +44,7 @@
   "account.featured.accounts": "プロフィール",
   "account.featured.collections": "コレクション",
   "account.featured.new_collection": "新規のコレクション",
+  "account.fetch_remote_outbox": "@{name}さんのOutboxを確認する（ローカルにないトゥートがあるかも！）",
   "account.field_overflow": "すべて表示",
   "account.filters.all": "全てのアクティビティ",
   "account.filters.boosts_toggle": "ブーストを表示",

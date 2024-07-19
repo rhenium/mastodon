@@ -8,8 +8,10 @@ import { useParams } from 'react-router';
 
 import { List as ImmutableList } from 'immutable';
 
+import { fetchRemoteOutbox } from '@/mastodon/actions/accounts_typed';
 import {
   expandTimelineByKey,
+  reloadTimelineByKey,
   timelineKey,
 } from '@/mastodon/actions/timelines_typed';
 import { AccountHeader } from '@/mastodon/components/account_header';
@@ -105,6 +107,19 @@ const InnerTimeline: FC<{ accountId: string; multiColumn: boolean }> = ({
     [accountId, dispatch, key],
   );
 
+  const handleReloadContent = useCallback(() => {
+    dispatch(reloadTimelineByKey({ key }));
+  }, [dispatch, key]);
+
+  const handleFetchRemoteOutbox = useCallback(() => {
+    void dispatch(
+      fetchRemoteOutbox({
+        accountId,
+        callback: handleReloadContent,
+      }),
+    );
+  }, [dispatch, accountId, handleReloadContent]);
+
   const { isLoading: isPinnedLoading, statusIds: pinnedStatusIds } =
     usePinnedStatusIds({ accountId, tagged, forceEmptyState });
 
@@ -116,8 +131,19 @@ const InnerTimeline: FC<{ accountId: string; multiColumn: boolean }> = ({
 
       <StatusList
         alwaysPrepend
-        prepend={<Prepend accountId={accountId} forceEmpty={forceEmptyState} />}
-        append={<RemoteHint accountId={accountId} />}
+        prepend={
+          <Prepend
+            accountId={accountId}
+            forceEmpty={forceEmptyState}
+            handleReloadContent={handleReloadContent}
+          />
+        }
+        append={
+          <RemoteHint
+            accountId={accountId}
+            onFetchRemoteOutbox={handleFetchRemoteOutbox}
+          />
+        }
         scrollKey='account_timeline'
         // We want to have this component when timeline is undefined (loading),
         // because if we don't the prepended component will re-render with every filter change.
@@ -140,15 +166,26 @@ const InnerTimeline: FC<{ accountId: string; multiColumn: boolean }> = ({
 const Prepend: FC<{
   accountId: string;
   forceEmpty: boolean;
-}> = ({ forceEmpty, accountId }) => {
+  handleReloadContent: () => void;
+}> = ({ forceEmpty, accountId, handleReloadContent }) => {
   const me = useCurrentAccountId();
   if (forceEmpty) {
-    return <AccountHeader accountId={accountId} hideTabs />;
+    return (
+      <AccountHeader
+        accountId={accountId}
+        hideTabs
+        onReloadContent={handleReloadContent}
+      />
+    );
   }
 
   return (
     <>
-      <AccountHeader accountId={accountId} hideTabs />
+      <AccountHeader
+        accountId={accountId}
+        hideTabs
+        onReloadContent={handleReloadContent}
+      />
       <AccountFilters />
       <FeaturedTags accountId={accountId} />
       {me === accountId && <TagSuggestions />}

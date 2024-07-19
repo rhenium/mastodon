@@ -5,7 +5,10 @@ import { FormattedMessage } from 'react-intl';
 import { List as ImmutableList, isList } from 'immutable';
 
 import { openModal } from '@/mastodon/actions/modal';
-import { expandAccountMediaTimeline } from '@/mastodon/actions/timelines';
+import {
+  expandAccountMediaTimeline,
+  reloadAccountMediaTimeline,
+} from '@/mastodon/actions/timelines';
 import { AccountHeader } from '@/mastodon/components/account_header';
 import { ColumnBackButton } from '@/mastodon/components/column_back_button';
 import { LimitedAccountHint } from '@/mastodon/components/limited_account_hint';
@@ -122,6 +125,10 @@ export const AccountGallery: React.FC<{
     }
   }, [maxId, dispatch, accountId, withReplies]);
 
+  const handleReloadContent = useCallback(() => {
+    void dispatch(reloadAccountMediaTimeline(accountId));
+  }, [dispatch, accountId]);
+
   const handleOpenMedia = useCallback(
     (attachment: MediaAttachment) => {
       const statusId = attachment.getIn(['status', 'id']);
@@ -216,7 +223,11 @@ export const AccountGallery: React.FC<{
         className='account-gallery__container'
         prepend={
           accountId && (
-            <AccountHeader accountId={accountId} hideTabs={forceEmptyState} />
+            <AccountHeader
+              accountId={accountId}
+              hideTabs={forceEmptyState}
+              onReloadContent={handleReloadContent}
+            />
           )
         }
         alwaysPrepend
