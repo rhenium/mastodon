@@ -235,6 +235,8 @@ namespace :api, format: false do
         post :unblock
         post :mute
         post :unmute
+
+        post :fetch_remote
       end
 
       scope module: :accounts do
