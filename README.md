@@ -1,3 +1,14 @@
+<h1>Mastodon (nyanya.net)</h1>
+
+A Mastodon fork customized for [nyanya.net]. The "nnn" branch tracks the live
+nyanya.net deployment.
+
+The branch is continuously rebased on top of upstream "main" branch.
+
+[nyanya.net]: https://nyanya.net
+
+---
+
 > [!NOTE]
 > Want to learn more about Mastodon?
 > Click below to find out more in a video.
