@@ -235,3 +235,6 @@ gem 'mail', '~> 2.8'
 gem 'base58', '~> 0.2.3'
 
 gem 'bloom_fit', '~> 1.2'
+
+# nnn
+gem "sidekiq-prometheus-exporter", "~> 0.2.1"
