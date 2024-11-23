@@ -234,3 +234,6 @@ gem 'mail', '~> 2.8'
 gem 'vite_rails'
 
 gem 'base58', '~> 0.2.3'
+
+# nnn
+gem "sidekiq-prometheus-exporter", "~> 0.2.1"
