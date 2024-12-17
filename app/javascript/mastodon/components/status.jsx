@@ -621,7 +621,6 @@ class Status extends ImmutablePureComponent {
                 <StatusContent
                   status={status}
                   onClick={this.handleClick}
-                  onTranslate={this.handleTranslate}
                   collapsible
                   onCollapsedToggle={this.handleCollapsedToggle}
                   {...statusContentProps}
