@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/devcontainers/ruby:4.0-trixie
 # Install node version from .nvmrc
 WORKDIR /app
 COPY .nvmrc .
-RUN /bin/bash --login -i -c "nvm install"
+RUN /bin/bash --login -i -c "nvm install && corepack enable"
 
 # Install additional OS packages
 RUN apt-get update && \
