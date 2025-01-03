@@ -4,6 +4,14 @@ class PublicStatusesIndex < Chewy::Index
   include DatetimeClampingConcern
 
   settings index: index_preset(refresh_interval: '30s', number_of_shards: 5), analysis: {
+    tokenizer: {
+      ngram_custom: {
+        type: 'ngram',
+        min_gram: 2,
+        max_gram: 2,
+      },
+    },
+
     filter: {
       english_stop: {
         type: 'stop',
@@ -23,7 +31,7 @@ class PublicStatusesIndex < Chewy::Index
 
     analyzer: {
       verbatim: {
-        tokenizer: 'uax_url_email',
+        tokenizer: 'ngram_custom',
         filter: %w(lowercase),
       },
 
