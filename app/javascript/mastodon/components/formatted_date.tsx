@@ -1,19 +1,24 @@
-import type { ComponentProps } from 'react';
+import type { DateTimeFormatOptions } from '@/mastodon/utils/intl_fixes';
+import { intlFixes } from '@/mastodon/utils/intl_fixes';
 
-import { FormattedDate } from 'react-intl';
-
+type FormattedDateProps = DateTimeFormatOptions & {
+  value: Date | string | undefined;
+  className?: string;
+};
 export const FormattedDateWrapper = ({
   className,
   ...props
-}: ComponentProps<typeof FormattedDate> & { className?: string }) => (
-  <FormattedDate {...props}>
-    {(date) => (
-      <time dateTime={tryIsoString(props.value)} className={className}>
-        {date}
-      </time>
-    )}
-  </FormattedDate>
-);
+}: FormattedDateProps) => {
+  // TODO: What is this? react-intl's FormattedDate appears to accept undefined
+  if (!props.value) return <time className={className} />;
+  const date = new Date(props.value);
+  const display = intlFixes.formatDate(date, props);
+  return (
+    <time {...props} dateTime={tryIsoString(props.value)} className={className}>
+      {display}
+    </time>
+  );
+};
 
 const tryIsoString = (date?: string | number | Date): string => {
   if (!date) {
