@@ -23,7 +23,12 @@ import ready from '@/mastodon/ready';
 import { assetHost } from '@/mastodon/utils/config';
 import { getNestedProperty } from '@/mastodon/utils/objects';
 import { isDarkMode } from '@/mastodon/utils/theme';
-import { formatTime } from '@/mastodon/utils/time';
+import {
+  formatTime,
+  saneDateString,
+  saneDateTimeString,
+  saneShortDateTimeString,
+} from '@/mastodon/utils/time';
 
 import 'cocoon-js-vanilla';
 
@@ -47,6 +52,7 @@ async function loaded() {
 
   const locale = document.documentElement.lang;
 
+  /*
   const dateTimeFormat = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
     month: 'long',
@@ -64,6 +70,7 @@ async function loaded() {
   const timeFormat = new Intl.DateTimeFormat(locale, {
     timeStyle: 'short',
   });
+  */
 
   const formatMessage = (
     { id, defaultMessage }: MessageDescriptor,
@@ -108,7 +115,7 @@ async function loaded() {
     .querySelectorAll<HTMLTimeElement>('time.formatted')
     .forEach((content) => {
       const datetime = new Date(content.dateTime);
-      const formattedDate = dateTimeFormat.format(datetime);
+      const formattedDate = saneDateTimeString(datetime);
 
       content.title = formattedDate;
       content.textContent = formattedDate;
@@ -132,24 +139,19 @@ async function loaded() {
     .querySelectorAll<HTMLTimeElement>('time.relative-formatted')
     .forEach((content) => {
       const datetime = new Date(content.dateTime);
+      const formattedTime = saneShortDateTimeString(datetime, new Date());
 
       let formattedContent: string;
 
       if (isToday(datetime)) {
-        const formattedTime = timeFormat.format(datetime);
-
         formattedContent = todayFormat.format({
           time: formattedTime,
         }) as string;
       } else {
-        formattedContent = dateFormat.format(datetime);
+        formattedContent = formattedTime;
       }
 
-      const timeGiven = content.dateTime.includes('T');
-      content.title = timeGiven
-        ? dateTimeFormat.format(datetime)
-        : dateFormat.format(datetime);
-
+      content.title = saneDateTimeString(datetime);
       content.textContent = formattedContent;
     });
 
@@ -160,8 +162,8 @@ async function loaded() {
 
       const timeGiven = content.dateTime.includes('T');
       content.title = timeGiven
-        ? dateTimeFormat.format(datetime)
-        : dateFormat.format(datetime);
+        ? saneDateTimeString(datetime)
+        : saneDateString(datetime);
       const now = Date.now();
       content.textContent = formatTime({
         // We don't want to show future dates.
