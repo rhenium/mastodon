@@ -376,7 +376,7 @@ body > [data-popover-placement] {
   z-index: 9999;
 }
 
-.invisible {
+:not(.unhandled-link) > .invisible {
   font-size: 0;
   line-height: 0;
   display: inline-block;
@@ -394,7 +394,7 @@ body > [data-popover-placement] {
   }
 }
 
-.ellipsis {
+:not(.unhandled-link) > .ellipsis {
   &::after {
     content: '…';
   }
