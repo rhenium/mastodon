@@ -39,6 +39,7 @@ import { IconWithBadge } from 'mastodon/components/icon_with_badge';
 import { WordmarkLogo } from 'mastodon/components/logo';
 import { ColumnLink } from 'mastodon/features/ui/components/column_link';
 import { getNavigationSkipLinkId } from 'mastodon/features/ui/components/skip_links';
+import { UIPreferences } from 'mastodon/features/ui/components/ui_preferences';
 import { useBreakpoint } from 'mastodon/features/ui/hooks/useBreakpoint';
 import { useIdentity } from 'mastodon/identity_context';
 import {
@@ -417,6 +418,10 @@ export const NavigationPanel: React.FC<{ multiColumn?: boolean }> = ({
             {disabledAccountId ? <DisabledAccountBanner /> : <SignInBanner />}
           </li>
         )}
+
+        <li className='navigation-panel__ui-preferences'>
+          <UIPreferences />
+        </li>
       </ul>
 
       <div className='flex-spacer' />

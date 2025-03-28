@@ -1,0 +1,83 @@
+:root {
+  --content-font-size: 15px;
+  --content-line-height: 22px; /* 22/15=1.4666... */
+}
+
+.text-size-smallest {
+  --content-font-size: 12px;
+  --content-line-height: 17px; /* 17/12=1.4166... */
+}
+
+.text-size-small {
+  --content-font-size: 13px;
+  --content-line-height: 19px; /* 19/13=1.4615... */
+}
+
+.text-size-medium {
+  --content-font-size: 14px;
+  --content-line-height: 20px; /* 20/14=1.4285... */
+}
+
+.text-size-large {
+  /* default */
+  --content-font-size: 15px;
+  --content-line-height: 22px;
+}
+
+.text-size-largest {
+  --content-font-size: 16px;
+  --content-line-height: 23px; /* 23/16=1.4375... */
+}
+
+.status__info,
+.status__prepend,
+.status__content,
+.status__content__read-more-button,
+.status__content__translate-button,
+.content-warning,
+.translate-button,
+.edit-indicator__content,
+.reply-indicator__content,
+.notification__message,
+.notification__report__details,
+.notification-group__main,
+.notification-group__main__header__label,
+.notification-group__main__additional-content,
+.notification-group__embedded-status__account,
+.notification-ungrouped__header,
+.account__header__bio {
+  font-size: var(--content-font-size) !important;
+  line-height: var(--content-line-height) !important;
+
+  .emojione {
+    min-width: var(--content-line-height) !important;
+    height: var(--content-line-height) !important;
+  }
+
+  .poll {
+    /* 14px */
+    font-size: inherit !important;
+  }
+}
+
+.status__info {
+  .status__relative-time,
+  .status__display-name {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.status--is-quote {
+  .display-name,
+  .status__relative-time {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+.account__wrapper {
+  .account__display-name {
+    font-size: inherit;
+  }
+}
