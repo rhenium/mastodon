@@ -39,6 +39,7 @@ import { suggestionsReducer } from './suggestions';
 import { followedTagsReducer } from './tags';
 import timelines from './timelines';
 import trends from './trends';
+import { uiPreferencesReducer } from './ui_preferences';
 import user_lists from './user_lists';
 
 const reducers = {
@@ -80,6 +81,7 @@ const reducers = {
   notificationRequests: notificationRequestsReducer,
   navigation: navigationReducer,
   ...sliceReducers,
+  uiPreferences: uiPreferencesReducer,
 };
 
 // We want the root state to be an ImmutableRecord, which is an object with a defined list of keys,
