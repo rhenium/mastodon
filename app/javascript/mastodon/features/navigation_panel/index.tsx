@@ -11,6 +11,7 @@ import {
 } from '@phosphor-icons/react';
 
 import { Callout } from '@/mastodon/components/callout/redesign';
+import { UIPreferences } from '@/mastodon/features/ui/components/ui_preferences';
 import { useScrollSensor } from '@/mastodon/hooks/useScrollSensor';
 import { useIdentity } from '@/mastodon/identity_context';
 import { disabledAccountId, trendsEnabled } from '@/mastodon/initial_state';
@@ -249,6 +250,7 @@ const ExpandedNavigationPanel: React.FC<NavigationPanelProps> = ({
         className={classes.bottomScrollFade}
         data-stuck={!isScrolledToBottom}
       />
+      <UIPreferences />
       {bottomSensor}
     </nav>
   );

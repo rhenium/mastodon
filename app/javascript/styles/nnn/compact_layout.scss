@@ -1,0 +1,179 @@
+:where(.compact-layout) {
+  line-height: unset;
+
+  .status__prepend,
+  .notification__message {
+    padding-top: 6px;
+
+    /* div is: (1) .status, (2) .account, (3) a unclassed div with tabindex containing a .status */
+    & + div {
+      padding-top: 6px !important;
+    }
+
+    /* The (3) case */
+    & + div .status {
+      padding-top: 0;
+    }
+  }
+
+  .status {
+    /* 16px */
+    padding: 8px;
+    padding-bottom: 0;
+  }
+
+  .status__info {
+    /* 10px */
+    padding-bottom: 6px;
+
+    .status__relative-time {
+      /* 40px by default */
+
+      /* Force this element to be two lines so the height matches with the display name */
+
+      /* I could alternatively height: 44px */
+      height: auto;
+
+      &::after {
+        content: '\a\a';
+        white-space: pre;
+      }
+    }
+  }
+
+  .content-warning {
+    /* 8px (5px + 8px) */
+    padding: 4px (5px + 8px);
+
+    p {
+      /* 8px */
+      margin-bottom: 0;
+    }
+  }
+
+  .status__content__read-more-button,
+  .status__content__translate-button {
+    /* 16px */
+    padding-top: 8px;
+  }
+
+  .hashtag-bar,
+  .translate-button {
+    /* margin-top: 16px -> be consistent with .status__content__read-more-button */
+    margin-top: 0;
+    padding-top: 8px;
+  }
+
+  .poll {
+    /* 16px */
+    margin-top: 8px;
+
+    li {
+      /* 10px */
+      margin-bottom: 0;
+    }
+  }
+
+  .status-card /* 14px */,
+  .status .media-gallery /* 16px */,
+  .status .video-player /* .. */,
+  .status .audio-player /* .. */,
+  .status .attachment-list /* .. */ {
+    margin-top: 8px;
+  }
+
+  .status__quote {
+    /* 16px */
+    margin-block-start: 8px;
+  }
+
+  .status--is-quote {
+    /* 12px */
+    padding: 8px;
+  }
+
+  .status__action-bar {
+    /* 16px */
+    margin-top: 8px;
+
+    button.icon-button svg.icon {
+      /* 24px each */
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /* Notification item */
+  .notification {
+    .account {
+      /* 16px */
+      padding: 12px;
+    }
+  }
+
+  /* Account view */
+  .account__header__bar {
+    /* 0 20px */
+    padding: 0 12px;
+
+    .account__header__tabs__name {
+      /* 16px 0 */
+      margin: 12px 0;
+    }
+
+    .account__header__bio {
+      .account__header__fields {
+        /* 16px */
+        margin-top: 12px;
+
+        dl {
+          /* 11px 16px */
+          padding: 8px 12px;
+        }
+      }
+    }
+
+    .account__header__extra__links {
+      margin: 0 -8px;
+      padding-top: 12px;
+    }
+  }
+
+  .account-timeline__header {
+    ._account_timeline_v2__filtersWrapper {
+      /* 16px 16px 8px */
+      padding: 0 16px;
+    }
+  }
+
+  /* Drawer */
+  .drawer__inner .compose-form {
+    /* 15px */
+    padding: 12px;
+
+    /* 32px */
+    gap: 12px;
+  }
+
+  /* Notifications */
+  .notification-group,
+  .notification-ungrouped {
+    /* 16px 24px */
+    padding: 8px 12px;
+  }
+
+  .notification-group__icon {
+    /* 40px -> unset: use the child (<svg>) width */
+    width: unset;
+  }
+
+  .notification-ungrouped__header {
+    /* 16px */
+    margin-bottom: 0;
+  }
+
+  .notification-group__main__header {
+    /* 8px */
+    gap: 4px;
+  }
+}
