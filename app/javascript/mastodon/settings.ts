@@ -63,6 +63,12 @@ export const searchHistory = new Settings<Record<string, RecentSearch[]>>(
 export const playerSettings = new Settings<{ volume: number; muted: boolean }>(
   'mastodon_player',
 );
+export type LayoutStyle = 'default' | 'compact';
+export type TextSize = 'smallest' | 'small' | 'medium' | 'large' | 'largest';
+export const uiPreferencesSettings = new Settings<{
+  layout_style: LayoutStyle;
+  text_size: TextSize;
+}>('nnn_ui_preferences');
 export const wrapstodonSettings = new Settings<
   Record<string, { archetypeRevealed: boolean }>
 >('wrapstodon');

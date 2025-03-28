@@ -111,6 +111,7 @@ const mapStateToProps = state => ({
   firstLaunch: state.getIn(['settings', 'introductionVersion'], 0) < INTRODUCTION_VERSION,
   newAccount: !state.getIn(['accounts', me, 'note']) && !state.getIn(['accounts', me, 'bot']) && state.getIn(['accounts', me, 'following_count'], 0) === 0 && state.getIn(['accounts', me, 'statuses_count'], 0) === 0,
   username: state.getIn(['accounts', me, 'username']),
+  uiPreferences: state.get('uiPreferences'),
 });
 
 class SwitchingColumnsArea extends PureComponent {
@@ -298,6 +299,7 @@ class UI extends PureComponent {
     firstLaunch: PropTypes.bool,
     newAccount: PropTypes.bool,
     username: PropTypes.string,
+    uiPreferences: PropTypes.object,
     ...WithRouterPropTypes,
   };
 
@@ -613,7 +615,7 @@ class UI extends PureComponent {
 
   render () {
     const { draggingOver } = this.state;
-    const { children, isComposing, location, layout, firstLaunch, newAccount } = this.props;
+    const { children, isComposing, location, layout, firstLaunch, newAccount, uiPreferences } = this.props;
 
     const handlers = {
       help: this.handleHotkeyToggleHelp,
@@ -644,9 +646,16 @@ class UI extends PureComponent {
 
     const minimalShell = !this.props.identity.signedIn && landingPage === 'overview' && location.pathname.startsWith('/overview');
 
+    // const uiPreferences: UIPreferencesState
+    const uiClasses = [];
+    if (uiPreferences.layoutStyle === 'compact') {
+      uiClasses.push('compact-layout');
+    }
+    uiClasses.push(`text-size-${uiPreferences.textSize}`);
+
     return (
       <Hotkeys global handlers={handlers}>
-        <div className={classNames('ui', { 'is-composing': isComposing })} ref={this.setRef}>
+        <div className={classNames('ui', ...uiClasses, { 'is-composing': isComposing })} ref={this.setRef}>
           {!minimalShell && (
             <SkipLinks
               multiColumn={layout === 'multi-column'}
