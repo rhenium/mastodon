@@ -12,13 +12,8 @@ export const RemoteHint: React.FC<RemoteHintProps> = ({ accountId }) => {
   const account = useAppSelector((state) =>
     accountId ? state.accounts.get(accountId) : undefined,
   );
-  const domain = account?.acct ? account.acct.split('@')[1] : undefined;
-  if (
-    !account ||
-    !account.url ||
-    account.acct !== account.username ||
-    !domain
-  ) {
+  const domain = account ? account.acct.split('@')[1] : undefined;
+  if (!account || account.acct === account.username || !domain) {
     return null;
   }
 
