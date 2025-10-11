@@ -23,7 +23,7 @@
     );
 
     width: clamp(
-      360px,
+      320px,
       (var(--available-width) / 4 - var(--multi-column-gap)),
       400px
     );
