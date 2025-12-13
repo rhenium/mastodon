@@ -1102,8 +1102,5 @@ DEPENDENCIES
   websocket-driver (~> 0.8)
   xorcist (~> 1.1)
 
-RUBY VERSION
-  ruby 4.0.6
-
 BUNDLED WITH
   4.0.16
