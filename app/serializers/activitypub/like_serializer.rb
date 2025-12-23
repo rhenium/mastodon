@@ -3,6 +3,7 @@
 class ActivityPub::LikeSerializer < ActivityPub::Serializer
   attributes :id, :type, :actor
   attribute :virtual_object, key: :object
+  attribute :content
 
   def id
     [ActivityPub::TagManager.instance.uri_for(object.account), '#likes/', object.id].join
@@ -18,5 +19,9 @@ class ActivityPub::LikeSerializer < ActivityPub::Serializer
 
   def virtual_object
     ActivityPub::TagManager.instance.uri_for(object.status)
+  end
+
+  def content
+    '🌟'
   end
 end
