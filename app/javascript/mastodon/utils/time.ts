@@ -1,5 +1,7 @@
 import type { IntlShape } from 'react-intl';
+/*
 import { defineMessages } from 'react-intl';
+*/
 
 export const SECOND = 1000;
 export const MINUTE = SECOND * 60;
@@ -70,6 +72,7 @@ export function unitToTime(unit: TimeUnit): number {
   }
 }
 
+/*
 const timeMessages = defineMessages({
   today: { id: 'relative_time.today', defaultMessage: 'today' },
   just_now: { id: 'relative_time.just_now', defaultMessage: 'now' },
@@ -121,10 +124,10 @@ const timeMessages = defineMessages({
 
 const DAYS_LIMIT = 7;
 const NOW_SECONDS = 10;
+*/
 
 export function formatTime({
   timestamp,
-  intl,
   now = Date.now(),
   noTime = false,
   short = false,
@@ -135,6 +138,14 @@ export function formatTime({
   noTime?: boolean;
   short?: boolean;
 }) {
+  if (noTime) {
+    return saneDateString(new Date(timestamp));
+  }
+  if (short) {
+    return saneShortDateTimeString(new Date(timestamp), new Date(now));
+  }
+  return saneDateTimeString(new Date(timestamp));
+  /*
   const { value, unit } = relativeTimeParts(timestamp, now);
 
   // If we're only showing days, show "today" for the current day.
@@ -151,8 +162,10 @@ export function formatTime({
   }
 
   return formatRelativePastTime({ value, unit, intl, short });
+  */
 }
 
+/*
 export function formatAbsoluteTime({
   timestamp,
   intl,
@@ -252,3 +265,33 @@ export function formatRelativePastTime({
     short ? timeMessages.just_now : timeMessages.just_now_full,
   );
 }
+*/
+
+export const saneDateString = (date: Date) => {
+  return (
+    date.getFullYear().toString() +
+    '-' +
+    (date.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
+    date.getDate().toString().padStart(2, '0')
+  );
+};
+
+const saneTimeString = (date: Date) => {
+  return (
+    date.getHours().toString().padStart(2, '0') +
+    ':' +
+    date.getMinutes().toString().padStart(2, '0') +
+    ':' +
+    date.getSeconds().toString().padStart(2, '0')
+  );
+};
+
+export const saneDateTimeString = (date: Date) => {
+  return `${saneDateString(date)} ${saneTimeString(date)}`;
+};
+
+export const saneShortDateTimeString = (date: Date, now: Date) => {
+  if (date.toDateString() === now.toDateString()) return saneTimeString(date);
+  return saneDateTimeString(date);
+};
