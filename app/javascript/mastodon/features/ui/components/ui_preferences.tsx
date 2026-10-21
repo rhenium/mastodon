@@ -119,6 +119,7 @@ export const UIPreferences: React.FC = () => {
       <p style={{ fontWeight: '500' }}>
         {intl.formatMessage(messages.ui_preferences)}
       </p>
+      {/*
       <SelectSection
         labelKey='layout'
         value={state.layoutStyle}
@@ -130,7 +131,7 @@ export const UIPreferences: React.FC = () => {
         value={state.textSize}
         options={textSizes}
         onChange={handleChangeTextSize}
-      />
+      />*/}
       <label>
         <input
           type='checkbox'
