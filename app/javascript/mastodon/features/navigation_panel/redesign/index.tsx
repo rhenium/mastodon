@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -45,6 +45,7 @@ import { getOrderedLists } from '@/mastodon/selectors/lists';
 import { selectUnreadNotificationGroupsCount } from '@/mastodon/selectors/notifications';
 import { useAppDispatch, useAppSelector } from '@/mastodon/store';
 import { invokeVirtualIosKeyboard } from '@/mastodon/utils/invoke_virtual_ios_keyboard';
+import { UIPreferences } from 'mastodon/features/ui/components/ui_preferences';
 
 import { useHasAnnouncements } from '../../announcements/hooks';
 import { FooterLinks } from '../../discovery_panel/footer_links';
@@ -353,6 +354,7 @@ export const RedesignNavigationPanel: React.FC<{
           </footer>
         </>
       )}
+      <UIPreferences />
       {bottomSensor}
     </nav>
   );

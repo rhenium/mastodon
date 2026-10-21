@@ -669,6 +669,9 @@ class UI extends PureComponent {
     if (uiPreferences.layoutStyle === 'compact') {
       uiClasses.push('compact-layout');
     }
+    if (uiPreferences.nopadding) {
+      uiClasses.push('nopadding');
+    }
     uiClasses.push(`text-size-${uiPreferences.textSize}`);
 
     return (

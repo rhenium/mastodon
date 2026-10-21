@@ -4,6 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import {
   changeLayoutStyle,
+  changeNopadding,
   changeTextSize,
 } from 'mastodon/actions/ui_preferences';
 import type { LayoutStyle, TextSize } from 'mastodon/settings';
@@ -106,6 +107,13 @@ export const UIPreferences: React.FC = () => {
     [dispatch],
   );
 
+  const handleChangeNopadding = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(changeNopadding(e.target.checked));
+    },
+    [dispatch],
+  );
+
   return (
     <div style={{ display: 'block', padding: '15px' }}>
       <p style={{ fontWeight: '500' }}>
@@ -123,6 +131,14 @@ export const UIPreferences: React.FC = () => {
         options={textSizes}
         onChange={handleChangeTextSize}
       />
+      <label>
+        <input
+          type='checkbox'
+          checked={state.nopadding}
+          onChange={handleChangeNopadding}
+        />
+        nopadding
+      </label>
     </div>
   );
 };
