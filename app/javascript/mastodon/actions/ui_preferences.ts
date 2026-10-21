@@ -9,3 +9,7 @@ export const changeLayoutStyle = createAction<LayoutStyle>(
 export const changeTextSize = createAction<TextSize>(
   'uiPreferences/changeTextSize',
 );
+
+export const changeNopadding = createAction<boolean>(
+  'uiPreferences/changeNopadding',
+);

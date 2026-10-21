@@ -68,6 +68,7 @@ export type TextSize = 'smallest' | 'small' | 'medium' | 'large' | 'largest';
 export const uiPreferencesSettings = new Settings<{
   layout_style: LayoutStyle;
   text_size: TextSize;
+  nopadding: boolean;
 }>('nnn_ui_preferences');
 export const wrapstodonSettings = new Settings<
   Record<string, { archetypeRevealed: boolean }>

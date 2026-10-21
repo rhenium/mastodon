@@ -1,0 +1,17 @@
+:where(.nopadding) {
+  * {
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    gap: 0 !important;
+    line-height: normal !important;
+    --multi-column-navigation-width: 0px !important;
+  }
+
+  ._comp_columns_area_styles_multi_column__navigationWrapper {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 1234;
+  }
+}
