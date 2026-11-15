@@ -64,7 +64,7 @@ class Quote < ApplicationRecord
   end
 
   def acceptable?
-    accepted? || !legacy?
+    true
   end
 
   def ensure_quoted_access

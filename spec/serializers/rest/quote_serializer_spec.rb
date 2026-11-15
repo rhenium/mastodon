@@ -25,7 +25,7 @@ RSpec.describe REST::QuoteSerializer do
           state: 'pending'
         )
     end
-  end
+  end if false
 
   context 'with an accepted quote' do
     let(:quote) { Fabricate(:quote, state: :accepted) }

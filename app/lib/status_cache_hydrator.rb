@@ -114,7 +114,7 @@ class StatusCacheHydrator
       payload.delete(:quoted_status) if nested
 
       # TODO: performance improvements
-      if quote.accepted?
+      if quote.accepted? || quote.pending?
         if quote.quoted_status.nil?
           payload[nested ? :quoted_status_id : :quoted_status] = nil
           payload[:state] = 'deleted'

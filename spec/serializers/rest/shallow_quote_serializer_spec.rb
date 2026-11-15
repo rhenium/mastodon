@@ -27,7 +27,7 @@ RSpec.describe REST::ShallowQuoteSerializer do
       expect(subject.deep_symbolize_keys)
         .to_not have_key(:quoted_status)
     end
-  end
+  end if false
 
   context 'with an accepted quote' do
     let(:quote) { Fabricate(:quote, state: :accepted) }

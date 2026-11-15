@@ -97,7 +97,7 @@ export function normalizeStatus(status, normalOldStatus, { bogusQuotePolicy = fa
     normalStatus.hidden       = expandSpoilers ? false : spoilerText.length > 0 || normalStatus.sensitive;
 
     // Remove quote fallback link from the DOM so it doesn't mess with paragraph margins
-    if (normalStatus.quote) {
+    if (normalStatus.quote?.state === 'accepted' && normalStatus.quote.quoted_status) {
       normalStatus.contentHtml = stripQuoteFallback(normalStatus.contentHtml);
     }
 
@@ -141,7 +141,7 @@ export function normalizeStatusTranslation(translation, status) {
   };
 
   // Remove quote fallback link from the DOM so it doesn't mess with paragraph margins
-  if (status.get('quote')) {
+  if (status.getIn(['quote', 'state']) === 'accepted' && status.getIn(['quote', 'quoted_status'])) {
     normalTranslation.contentHtml = stripQuoteFallback(normalTranslation.contentHtml);
   }
 
