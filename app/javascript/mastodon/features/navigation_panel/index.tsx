@@ -11,7 +11,6 @@ import {
 } from '@phosphor-icons/react';
 
 import { Callout } from '@/mastodon/components/callout/redesign';
-import { UIPreferences } from '@/mastodon/features/ui/components/ui_preferences';
 import { useScrollSensor } from '@/mastodon/hooks/useScrollSensor';
 import { useIdentity } from '@/mastodon/identity_context';
 import { disabledAccountId, trendsEnabled } from '@/mastodon/initial_state';
@@ -34,6 +33,7 @@ import { ListSection } from './list_section';
 import { DisabledAccountBanner, LoggedOutInfo } from './logged_out_info';
 import { NavigationLink } from './navigation_link';
 import classes from './styles.module.scss';
+import { UIPreferences } from './ui_preferences';
 
 const messages = defineMessages({
   main: {
@@ -224,6 +224,7 @@ const ExpandedNavigationPanel: React.FC<NavigationPanelProps> = ({
           </ul>
 
           <footer className={classes.footer}>
+            <UIPreferences />
             <FooterLinks multiColumn={multiColumn} />
           </footer>
         </>
@@ -242,6 +243,7 @@ const ExpandedNavigationPanel: React.FC<NavigationPanelProps> = ({
           </ul>
           <footer className={classes.footer}>
             {disabledAccountId ? <DisabledAccountBanner /> : <LoggedOutInfo />}
+            <UIPreferences />
             <FooterLinks multiColumn={multiColumn} />
           </footer>
         </>
@@ -250,7 +252,6 @@ const ExpandedNavigationPanel: React.FC<NavigationPanelProps> = ({
         className={classes.bottomScrollFade}
         data-stuck={!isScrolledToBottom}
       />
-      <UIPreferences />
       {bottomSensor}
     </nav>
   );

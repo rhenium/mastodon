@@ -10,6 +10,8 @@ import {
 import type { LayoutStyle, TextSize } from 'mastodon/settings';
 import { useAppDispatch, useAppSelector } from 'mastodon/store/typed_functions';
 
+import classes from './footer_links.module.scss';
+
 const messages = defineMessages({
   ui_preferences: {
     id: 'ui_preferences.ui_preferences',
@@ -115,11 +117,12 @@ export const UIPreferences: React.FC = () => {
   );
 
   return (
-    <div style={{ display: 'block', padding: '15px' }}>
-      <p style={{ fontWeight: '500' }}>
-        {intl.formatMessage(messages.ui_preferences)}
-      </p>
-      {/*
+    <div className={classes.root}>
+      <section>
+        <h2 className={classes.heading}>
+          {intl.formatMessage(messages.ui_preferences)}
+        </h2>
+        {/*
       <SelectSection
         labelKey='layout'
         value={state.layoutStyle}
@@ -132,14 +135,15 @@ export const UIPreferences: React.FC = () => {
         options={textSizes}
         onChange={handleChangeTextSize}
       />*/}
-      <label>
-        <input
-          type='checkbox'
-          checked={state.nopadding}
-          onChange={handleChangeNopadding}
-        />
-        nopadding
-      </label>
+        <label>
+          <input
+            type='checkbox'
+            checked={state.nopadding}
+            onChange={handleChangeNopadding}
+          />
+          nopadding
+        </label>
+      </section>
     </div>
   );
 };
